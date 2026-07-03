@@ -1,65 +1,62 @@
-import Image from "next/image";
+import Link from "next/link"
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="min-h-screen bg-slate-50 text-slate-900">
+      <div className="mx-auto max-w-7xl px-6 py-16 sm:px-8 lg:px-10">
+        <div className="grid gap-16 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+          <section>
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-blue-600">
+              KamzyBee Enterprise
+            </p>
+            <h1 className="mt-6 text-4xl font-bold tracking-tight sm:text-5xl">
+              A modern inventory experience for product teams.
+            </h1>
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-700">
+              Browse stock across categories and brands, inspect product details, and view inventory status in a clean, responsive Next.js app powered by Sanity.
+            </p>
+            <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+              <Link
+                href="/inventory"
+                className="inline-flex items-center justify-center rounded-full bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
+              >
+                Browse Inventory
+              </Link>
+              <Link
+                href="/about"
+                className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-100"
+              >
+                Learn more
+              </Link>
+            </div>
+          </section>
+
+          <section className="relative isolate overflow-hidden rounded-3xl bg-white px-6 py-10 shadow-xl ring-1 ring-slate-200 sm:px-10">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-slate-100 opacity-80" />
+            <div className="relative">
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">
+                Inventory snapshot
+              </p>
+              <div className="mt-8 grid gap-4 sm:grid-cols-2">
+                <div className="rounded-3xl bg-slate-950 p-6 text-white">
+                  <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Real-time stock</p>
+                  <p className="mt-4 text-3xl font-semibold">Fast browsing</p>
+                  <p className="mt-3 text-sm leading-6 text-slate-300">
+                    Search and filter products by brand, category, or condition for faster decision making.
+                  </p>
+                </div>
+                <div className="rounded-3xl bg-white p-6 ring-1 ring-slate-200">
+                  <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Project setup</p>
+                  <p className="mt-4 text-3xl font-semibold text-slate-900">Next.js App Router</p>
+                  <p className="mt-3 text-sm leading-6 text-slate-600">
+                    Built with modern Next.js routing, secure API fetches, and Sanity-backed product data.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+      </div>
+    </main>
+  )
 }
