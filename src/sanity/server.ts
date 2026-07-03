@@ -10,6 +10,7 @@ export const serverClient = createClient({
   // If this is incorrect, Sanity returns: "Unauthorized - Session does not match project host".
   // For most Sanity setups, the default host (production) is correct, so we only set it when provided.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ...(process.env.SANITY_PROJECT_HOST ? { apiHost: process.env.SANITY_PROJECT_HOST as any } : {}),
+  apiHost: process.env.SANITY_PROJECT_HOST as any,
 })
+
 
