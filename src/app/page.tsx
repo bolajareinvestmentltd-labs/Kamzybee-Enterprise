@@ -1,4 +1,4 @@
-import Link from "next/link"
+import Link from 'next/link'
 
 export default function Home() {
   return (
@@ -10,10 +10,10 @@ export default function Home() {
               KamzyBee Enterprise
             </p>
             <h1 className="mt-6 text-4xl font-bold tracking-tight sm:text-5xl">
-              A modern inventory experience for product teams.
+              Real inventory data for your buying and selling workflows.
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-700">
-              Browse stock across categories and brands, inspect product details, and view inventory status in a clean, responsive Next.js app powered by Sanity.
+              Browse stock across categories and brands, inspect product details, and manage inventory.
             </p>
             <div className="mt-10 flex flex-col gap-4 sm:flex-row">
               <Link
@@ -23,10 +23,10 @@ export default function Home() {
                 Browse Inventory
               </Link>
               <Link
-                href="/about"
+                href="/inventory"
                 className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-100"
               >
-                Learn more
+                View products
               </Link>
             </div>
           </section>
@@ -39,17 +39,17 @@ export default function Home() {
               </p>
               <div className="mt-8 grid gap-4 sm:grid-cols-2">
                 <div className="rounded-3xl bg-slate-950 p-6 text-white">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Real-time stock</p>
-                  <p className="mt-4 text-3xl font-semibold">Fast browsing</p>
+                  <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Live stock view</p>
+                  <p className="mt-4 text-3xl font-semibold">Supabase inventory</p>
                   <p className="mt-3 text-sm leading-6 text-slate-300">
-                    Search and filter products by brand, category, or condition for faster decision making.
+                    Display real-time inventory from your Supabase tables with fast search and category filtering.
                   </p>
                 </div>
                 <div className="rounded-3xl bg-white p-6 ring-1 ring-slate-200">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Project setup</p>
-                  <p className="mt-4 text-3xl font-semibold text-slate-900">Next.js App Router</p>
+                  <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Project details</p>
+                  <p className="mt-4 text-3xl font-semibold text-slate-900">Responsive inventory app</p>
                   <p className="mt-3 text-sm leading-6 text-slate-600">
-                    Built with modern Next.js routing, secure API fetches, and Sanity-backed product data.
+                    Built with Next.js, Tailwind, and Supabase for fast product discovery.
                   </p>
                 </div>
               </div>

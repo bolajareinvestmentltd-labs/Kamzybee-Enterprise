@@ -1,12 +1,22 @@
 'use client'
 
-import {useEffect, useState} from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
-import {useParams} from 'next/navigation'
-import {sanityFetch} from '@/sanity/client'
-import {PRODUCT_BY_SLUG_QUERY} from '@/sanity/queries'
-import {Product} from '@/sanity/types'
+import { useParams } from 'next/navigation'
+
+interface Product {
+  id: string
+  name: string
+  brand: string
+  category: string
+  remarks: string
+  condition: string
+  quantity: number
+  price: number
+  storageRam: string
+  colors: string
+  slug: string
+}
 
 export default function ProductDetailPage() {
   const params = useParams()
@@ -22,11 +32,18 @@ export default function ProductDetailPage() {
     const fetchProduct = async () => {
       try {
         setLoading(true)
-        const fetchedProduct = await sanityFetch(PRODUCT_BY_SLUG_QUERY, {slug})
-        if (!fetchedProduct) {
+        const response = await fetch(`/api/inventory?slug=${encodeURIComponent(slug)}`)
+        if (!response.ok) {
+          const body = await response.text()
+          throw new Error(body || 'Product fetch failed')
+        }
+
+        const data = await response.json()
+        if (!Array.isArray(data) || data.length === 0) {
           setError('Product not found')
+          setProduct(null)
         } else {
-          setProduct(fetchedProduct)
+          setProduct(data[0])
         }
       } catch (err) {
         console.error('Error fetching product:', err)
@@ -68,7 +85,6 @@ export default function ProductDetailPage() {
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Breadcrumb */}
         <div className="mb-8 flex items-center gap-2 text-sm">
           <Link href="/" className="text-blue-600 hover:text-blue-700">
             Home
@@ -82,27 +98,13 @@ export default function ProductDetailPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-          {/* Product Image */}
           <div className="flex items-center justify-center bg-gray-50 rounded-lg overflow-hidden h-96">
-            {product.image?.asset?.url ? (
-              <Image
-                src={product.image.asset.url}
-                alt={product.name}
-                width={400}
-                height={400}
-                className="object-contain"
-                priority
-              />
-            ) : (
-              <div className="flex items-center justify-center w-full h-full text-gray-400">
-                <span>No image available</span>
-              </div>
-            )}
+            <div className="text-center text-slate-500">
+              <span className="text-sm">Product image not available</span>
+            </div>
           </div>
 
-          {/* Product Details */}
           <div className="flex flex-col justify-start">
-            {/* Category & Condition */}
             <div className="mb-4 flex items-center gap-2">
               <span className="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-full">
                 {product.category}
@@ -114,19 +116,16 @@ export default function ProductDetailPage() {
               )}
             </div>
 
-            {/* Product Name & Brand */}
             <h1 className="text-4xl font-bold text-gray-900 mb-2">{product.name}</h1>
             <p className="text-xl text-gray-600 mb-6">{product.brand}</p>
 
-            {/* Price */}
             <div className="mb-8">
               <p className="text-sm text-gray-600 mb-2">Price</p>
               <p className="text-4xl font-bold text-gray-900">
-                ₦{product.price.toLocaleString('en-US', {minimumFractionDigits: 0})}
+                ₦{product.price.toLocaleString('en-US', { minimumFractionDigits: 0 })}
               </p>
             </div>
 
-            {/* Stock Status */}
             <div className="mb-8 p-4 rounded-lg bg-gray-50">
               {product.quantity > 0 ? (
                 <p className="text-lg font-medium text-green-600">
@@ -137,7 +136,6 @@ export default function ProductDetailPage() {
               )}
             </div>
 
-            {/* Storage/RAM Options */}
             {storageOptions.length > 0 && (
               <div className="mb-8">
                 <p className="text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide">
@@ -156,7 +154,6 @@ export default function ProductDetailPage() {
               </div>
             )}
 
-            {/* Colors */}
             {colors.length > 0 && (
               <div className="mb-8">
                 <p className="text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide">
@@ -175,7 +172,6 @@ export default function ProductDetailPage() {
               </div>
             )}
 
-            {/* Quantity Selector */}
             <div className="mb-8">
               <p className="text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide">
                 Quantity
@@ -198,7 +194,6 @@ export default function ProductDetailPage() {
               </div>
             </div>
 
-            {/* Add to Cart Button */}
             <button
               disabled={product.quantity === 0}
               className="w-full mb-4 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
@@ -206,17 +201,12 @@ export default function ProductDetailPage() {
               {product.quantity > 0 ? 'Add to Cart' : 'Out of Stock'}
             </button>
 
-            {/* Back Link */}
-            <Link
-              href="/inventory"
-              className="text-center text-blue-600 hover:text-blue-700 font-medium py-2"
-            >
+            <Link href="/inventory" className="text-center text-blue-600 hover:text-blue-700 font-medium py-2">
               ← Back to inventory
             </Link>
           </div>
         </div>
 
-        {/* Product Description */}
         {product.remarks && (
           <div className="mt-12 pt-8 border-t border-gray-200">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Product Details</h2>
@@ -224,7 +214,6 @@ export default function ProductDetailPage() {
           </div>
         )}
 
-        {/* Specifications */}
         <div className="mt-12 pt-8 border-t border-gray-200">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Specifications</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

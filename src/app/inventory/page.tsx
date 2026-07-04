@@ -1,15 +1,24 @@
 'use client'
 
-import {useEffect, useState} from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
-import {sanityFetch} from '@/sanity/client'
-import {ALL_PRODUCTS_QUERY, ALL_CATEGORIES_QUERY} from '@/sanity/queries'
-import {Product} from '@/sanity/types'
+
+interface Product {
+  id: string
+  name: string
+  brand: string
+  category: string
+  remarks: string
+  condition: string
+  quantity: number
+  price: number
+  storageRam: string
+  colors: string
+  slug: string
+}
 
 export default function InventoryPage() {
   const [products, setProducts] = useState<Product[]>([])
-  const [categories, setCategories] = useState<string[]>([])
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [loading, setLoading] = useState(true)
@@ -19,13 +28,14 @@ export default function InventoryPage() {
     const fetchData = async () => {
       try {
         setLoading(true)
-        // Fetch all products
-        const allProducts = await sanityFetch(ALL_PRODUCTS_QUERY)
-        setProducts(allProducts || [])
+        const response = await fetch('/api/inventory')
+        if (!response.ok) {
+          const body = await response.text()
+          throw new Error(body || 'Inventory fetch failed')
+        }
 
-        // Fetch all categories
-        const allCategories = await sanityFetch(ALL_CATEGORIES_QUERY)
-        setCategories(allCategories || [])
+        const data = await response.json()
+        setProducts(data)
       } catch (err) {
         console.error('Error fetching data:', err)
         setError('Failed to load products. Please try again later.')
@@ -37,165 +47,112 @@ export default function InventoryPage() {
     fetchData()
   }, [])
 
-  // Filter products based on category and search query
-  let filteredProducts = products
+  const categories = useMemo(() => {
+    return Array.from(new Set(products.map((product) => product.category))).filter(Boolean)
+  }, [products])
 
-  if (selectedCategory) {
-    filteredProducts = filteredProducts.filter((p) => p.category === selectedCategory)
-  }
+  const filteredProducts = useMemo(() => {
+    return products.filter((product) => {
+      if (selectedCategory && product.category !== selectedCategory) {
+        return false
+      }
 
-  if (searchQuery) {
-    filteredProducts = filteredProducts.filter((p) =>
-      p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.brand.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-  }
+      if (searchQuery) {
+        const lowerSearch = searchQuery.toLowerCase()
+        return (
+          product.name.toLowerCase().includes(lowerSearch) ||
+          product.brand.toLowerCase().includes(lowerSearch) ||
+          product.category.toLowerCase().includes(lowerSearch)
+        )
+      }
+
+      return true
+    })
+  }, [products, selectedCategory, searchQuery])
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-slate-50 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Inventory</h1>
-          <p className="text-lg text-gray-600">Browse our latest products and tech gear</p>
+          <h1 className="text-4xl font-bold text-slate-900 mb-2">Inventory</h1>
+          <p className="text-lg text-slate-600">Browse your live Supabase product inventory with filters for category and search.</p>
         </div>
 
-        {/* Search Bar */}
-        <div className="mb-8">
+        <div className="mb-8 grid gap-4 md:grid-cols-[1fr_auto]">
           <input
             type="text"
-            placeholder="Search products by name or brand..."
+            placeholder="Search products by name, brand, or category..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full rounded-3xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
           />
         </div>
 
-        {/* Category Filter */}
         {categories.length > 0 && (
-          <div className="mb-8">
-            <h2 className="text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide">
-              Filter by Category
-            </h2>
-            <div className="flex flex-wrap gap-2">
+          <div className="mb-8 flex flex-wrap items-center gap-3">
+            <button
+              onClick={() => setSelectedCategory(null)}
+              className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+                selectedCategory === null
+                  ? 'bg-blue-600 text-white'
+                  : 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
+              }`}
+            >
+              All Products
+            </button>
+            {categories.map((category) => (
               <button
-                onClick={() => setSelectedCategory(null)}
-                className={`px-4 py-2 rounded-full font-medium transition-colors ${
-                  selectedCategory === null
+                key={category}
+                onClick={() => setSelectedCategory(category)}
+                className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+                  selectedCategory === category
                     ? 'bg-blue-600 text-white'
-                    : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                    : 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
                 }`}
               >
-                All Products
+                {category}
               </button>
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  onClick={() => setSelectedCategory(category)}
-                  className={`px-4 py-2 rounded-full font-medium transition-colors ${
-                    selectedCategory === category
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
-                  }`}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
+            ))}
           </div>
         )}
 
-        {/* Loading State */}
         {loading && (
-          <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <div className="flex min-h-[20rem] items-center justify-center">
+            <div className="h-12 w-12 animate-spin rounded-full border-4 border-blue-600 border-t-transparent"></div>
           </div>
         )}
 
-        {/* Error State */}
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-8">
-            <p className="text-red-700">{error}</p>
+          <div className="rounded-3xl border border-red-200 bg-red-50 p-6 text-red-700">
+            {error}
           </div>
         )}
 
-        {/* Results Count */}
         {!loading && !error && (
-          <div className="mb-4">
-            <p className="text-sm text-gray-600">
-              Showing <span className="font-semibold">{filteredProducts.length}</span> of{' '}
-              <span className="font-semibold">{products.length}</span> products
-            </p>
+          <div className="mb-4 text-sm text-slate-600">
+            Showing <span className="font-semibold">{filteredProducts.length}</span> of <span className="font-semibold">{products.length}</span> products
           </div>
         )}
 
-        {/* Products Grid */}
         {!loading && !error && filteredProducts.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
             {filteredProducts.map((product) => (
-              <Link
-                key={product._id}
-                href={`/inventory/${product.slug.current}`}
-                className="group"
-              >
-                <div className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow overflow-hidden h-full flex flex-col">
-                  {/* Product Image */}
-                  <div className="relative h-48 bg-gray-100 overflow-hidden">
-                    {product.image?.asset?.url ? (
-                      <Image
-                        src={product.image.asset.url}
-                        alt={product.name}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-gray-400">
-                        <span>No image</span>
-                      </div>
-                    )}
-                    {product.condition === 'UK Used' && (
-                      <div className="absolute top-2 right-2 bg-yellow-500 text-white px-2 py-1 text-xs font-bold rounded">
-                        UK Used
-                      </div>
-                    )}
+              <Link key={product.id} href={`/inventory/${product.slug}`} className="group">
+                <div className="flex h-full flex-col overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+                  <div className="flex h-44 items-center justify-center bg-slate-100 px-4 text-center text-slate-500">
+                    <span className="text-sm">Product image not available</span>
                   </div>
-
-                  {/* Product Info */}
-                  <div className="p-4 flex-1 flex flex-col">
-                    <div className="mb-2">
-                      <p className="text-xs text-gray-500 uppercase tracking-wide">{product.category}</p>
-                      <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 group-hover:text-blue-600">
-                        {product.name}
-                      </h3>
-                      <p className="text-xs text-gray-600 mt-1">{product.brand}</p>
+                  <div className="flex flex-1 flex-col gap-4 p-6">
+                    <div>
+                      <p className="text-xs uppercase tracking-[0.22em] text-slate-500">{product.category}</p>
+                      <h2 className="mt-3 text-xl font-semibold text-slate-900">{product.name}</h2>
+                      <p className="mt-2 text-sm text-slate-600">{product.brand}</p>
                     </div>
 
-                    {/* Storage/RAM Info */}
-                    {product.storageRam && (
-                      <p className="text-xs text-gray-500 mb-2">{product.storageRam}</p>
-                    )}
-
-                    {/* Colors */}
-                    {product.colors && (
-                      <p className="text-xs text-gray-500 mb-3">Colors: {product.colors}</p>
-                    )}
-
-                    {/* Stock Status */}
-                    <div className="mb-3">
-                      {product.quantity > 0 ? (
-                        <p className="text-xs font-medium text-green-600">
-                          {product.quantity} in stock
-                        </p>
-                      ) : (
-                        <p className="text-xs font-medium text-red-600">Out of stock</p>
-                      )}
-                    </div>
-
-                    {/* Price */}
-                    <div className="mt-auto pt-3 border-t border-gray-100">
-                      <p className="text-lg font-bold text-gray-900">
-                        ₦{product.price.toLocaleString()}
-                      </p>
+                    <div className="mt-auto">
+                      <p className="text-sm text-slate-500">Condition</p>
+                      <p className="text-base font-semibold text-slate-900">{product.condition}</p>
+                      <p className="mt-3 text-2xl font-bold text-slate-900">₦{product.price.toLocaleString()}</p>
                     </div>
                   </div>
                 </div>
@@ -204,26 +161,19 @@ export default function InventoryPage() {
           </div>
         )}
 
-        {/* Empty State */}
         {!loading && !error && filteredProducts.length === 0 && (
-          <div className="text-center py-12">
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No products found</h3>
-            <p className="text-gray-600 mb-4">
-              {searchQuery || selectedCategory
-                ? 'Try adjusting your filters or search query'
-                : 'No products available at the moment'}
-            </p>
-            {(searchQuery || selectedCategory) && (
-              <button
-                onClick={() => {
-                  setSearchQuery('')
-                  setSelectedCategory(null)
-                }}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                Clear filters
-              </button>
-            )}
+          <div className="rounded-[2rem] border border-slate-200 bg-white p-10 text-center">
+            <h2 className="text-2xl font-semibold text-slate-900">No products found</h2>
+            <p className="mt-3 text-slate-600">Try changing the search terms or category filter to view matching inventory.</p>
+            <button
+              onClick={() => {
+                setSearchQuery('')
+                setSelectedCategory(null)
+              }}
+              className="mt-6 rounded-full bg-blue-600 px-6 py-3 text-sm font-semibold text-white hover:bg-blue-700"
+            >
+              Clear filters
+            </button>
           </div>
         )}
       </div>
