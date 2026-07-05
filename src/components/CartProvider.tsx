@@ -26,6 +26,8 @@ const CART_STORAGE_KEY = 'kamzybee_cart_items'
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([])
+  const [isMemberVerified, setIsMemberVerified] = useState(false)
+  const [discountPercent, setDiscountPercent] = useState(0)
 
   useEffect(() => {
     const raw = window.localStorage.getItem(CART_STORAGE_KEY)
@@ -37,6 +39,25 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         setItems([])
       }
     }
+  }, [])
+
+  useEffect(() => {
+    const verified = window.localStorage.getItem('rotaryVerified') === 'true'
+    const pct = Number(window.localStorage.getItem('rotaryDiscountPct') || '0')
+    setIsMemberVerified(verified)
+    setDiscountPercent(isNaN(pct) ? 0 : pct)
+
+    function onStorage(e: StorageEvent) {
+      if (e.key === 'rotaryVerified' || e.key === 'rotaryDiscountPct') {
+        const v = window.localStorage.getItem('rotaryVerified') === 'true'
+        const p = Number(window.localStorage.getItem('rotaryDiscountPct') || '0')
+        setIsMemberVerified(v)
+        setDiscountPercent(isNaN(p) ? 0 : p)
+      }
+    }
+
+    window.addEventListener('storage', onStorage)
+    return () => window.removeEventListener('storage', onStorage)
   }, [])
 
   useEffect(() => {
@@ -86,6 +107,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       items,
       totalItems: items.reduce((sum, item) => sum + item.quantity, 0),
       totalAmount: items.reduce((sum, item) => sum + item.price * item.quantity, 0),
+      isMemberVerified,
+      discountPercent,
+      discountedTotal: (() => {
+        const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
+        if (!isMemberVerified || !discountPercent) return total
+        const discounted = Math.round(total * (1 - discountPercent / 100))
+        return discounted
+      })(),
       addItem,
       updateItem,
       removeItem,

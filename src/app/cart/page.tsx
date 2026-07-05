@@ -5,7 +5,7 @@ import { useCart } from '@/components/CartProvider'
 import RotaryDiscountComponent from '@/components/RotaryDiscountComponent'
 
 export default function CartPage() {
-  const { items, totalAmount, updateItem, removeItem, clearCart } = useCart()
+  const { items, totalAmount, discountedTotal, updateItem, removeItem, clearCart } = useCart()
 
   return (
     <div className="min-h-screen bg-slate-50 py-16">
@@ -75,11 +75,15 @@ export default function CartPage() {
               ))}
             </div>
 
-            <div className="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm">
+                <div className="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm">
               <div className="space-y-4">
                 <div>
                   <p className="text-sm uppercase tracking-[0.28em] text-slate-500">Order summary</p>
                   <p className="mt-3 text-3xl font-bold text-slate-900">₦{totalAmount.toLocaleString()}</p>
+                  {/** Show discounted total when applicable */}
+                  {typeof (discountedTotal) === 'number' && discountedTotal !== totalAmount && (
+                    <p className="mt-2 text-sm text-green-700">Discounted total: ₦{discountedTotal.toLocaleString()}</p>
+                  )}
                 </div>
                 <div className="rounded-3xl bg-slate-50 p-4">
                   <p className="text-sm text-slate-600">You can update quantities or remove items here before checkout.</p>

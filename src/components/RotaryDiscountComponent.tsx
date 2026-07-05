@@ -21,6 +21,13 @@ export default function RotaryDiscountComponent() {
       const data = await res.json()
       if (res.ok) {
         setStatus('verified')
+        try {
+          // store a placeholder discount percentage and verified flag locally
+          window.localStorage.setItem('rotaryVerified', 'true')
+          window.localStorage.setItem('rotaryDiscountPct', '10')
+        } catch {
+          // ignore
+        }
       } else {
         setStatus(data?.error ?? 'failed')
       }
