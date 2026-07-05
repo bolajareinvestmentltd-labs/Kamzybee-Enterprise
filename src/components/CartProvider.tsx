@@ -15,6 +15,9 @@ interface CartContextValue {
   items: CartItem[]
   totalItems: number
   totalAmount: number
+  discountedTotal: number
+  isMemberVerified: boolean
+  discountPercent: number
   addItem: (item: Omit<CartItem, 'quantity'>, quantity?: number) => void
   updateItem: (slug: string, quantity: number) => void
   removeItem: (slug: string) => void
