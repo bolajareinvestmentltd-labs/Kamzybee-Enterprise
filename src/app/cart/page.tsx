@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useCart } from '@/components/CartProvider'
+import RotaryDiscountComponent from '@/components/RotaryDiscountComponent'
 
 export default function CartPage() {
   const { items, totalAmount, updateItem, removeItem, clearCart } = useCart()
@@ -96,6 +97,9 @@ export default function CartPage() {
                 >
                   Proceed to checkout
                 </button>
+                <div className="mt-6">
+                  <RotaryDiscountComponent />
+                </div>
               </div>
             </div>
           </div>

@@ -33,6 +33,7 @@ export default function RootLayout({
                 <nav className='hidden items-center gap-4 text-sm text-slate-600 md:flex'>
                   <Link href='/inventory' className='font-medium text-slate-900 hover:text-blue-600'>Inventory</Link>
                   <Link href='/' className='hover:text-blue-600'>Home</Link>
+                  <Link href='/about' className='hover:text-blue-600'>About</Link>
                 </nav>
                 <CartLink />
                 <AuthMenu />
