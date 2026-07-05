@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
+import { useCart } from '@/components/CartProvider'
 
 interface Product {
   id: string
@@ -81,6 +82,20 @@ export default function ProductDetailPage() {
 
   const colors = product.colors?.split(',').map((c) => c.trim()) || []
   const storageOptions = product.storageRam?.split(',').map((s) => s.trim()) || []
+  const { addItem } = useCart()
+
+  const handleAddToCart = () => {
+    addItem(
+      {
+        id: product.id,
+        slug: product.slug,
+        name: product.name,
+        price: product.price,
+        maxQuantity: product.quantity,
+      },
+      quantity,
+    )
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -195,6 +210,8 @@ export default function ProductDetailPage() {
             </div>
 
             <button
+              type="button"
+              onClick={handleAddToCart}
               disabled={product.quantity === 0}
               className="w-full mb-4 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
