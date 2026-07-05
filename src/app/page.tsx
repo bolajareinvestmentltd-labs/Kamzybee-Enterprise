@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 const categories = [
   {
@@ -76,14 +77,23 @@ export default function Home() {
                   <p className="text-sm uppercase tracking-[0.24em] text-slate-300">Animated product deck</p>
                   <div className="grid gap-3 sm:grid-cols-3">
                     <div className="rounded-3xl border border-white/10 bg-slate-950/80 p-4 text-center shadow-xl transition hover:-translate-y-1 animate-float">
+                      <div className="mx-auto mb-3 h-20 w-20">
+                        <Image src="/logo.svg" alt="Phone" width={80} height={80} />
+                      </div>
                       <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Phone</p>
                       <p className="mt-2 text-lg font-semibold">Galaxy</p>
                     </div>
                     <div className="rounded-3xl border border-white/10 bg-slate-950/80 p-4 text-center shadow-xl transition hover:-translate-y-1 animate-float">
+                      <div className="mx-auto mb-3 h-20 w-20">
+                        <Image src="/globe.svg" alt="Laptop" width={80} height={80} />
+                      </div>
                       <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Laptop</p>
                       <p className="mt-2 text-lg font-semibold">ThinkPad</p>
                     </div>
                     <div className="rounded-3xl border border-white/10 bg-slate-950/80 p-4 text-center shadow-xl transition hover:-translate-y-1 animate-float">
+                      <div className="mx-auto mb-3 h-20 w-20">
+                        <Image src="/file.svg" alt="Accessory" width={80} height={80} />
+                      </div>
                       <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Accessory</p>
                       <p className="mt-2 text-lg font-semibold">Charger</p>
                     </div>
