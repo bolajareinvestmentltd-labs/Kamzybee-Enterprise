@@ -47,7 +47,7 @@ export default function Home() {
             </div>
           </div>
 
-          <VideoHero />
+          <VideoHeroWrapper />
         </section>
 
         <section className="mt-20 grid gap-8 lg:grid-cols-3">
