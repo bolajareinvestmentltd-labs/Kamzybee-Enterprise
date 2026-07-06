@@ -1,7 +1,5 @@
 import Link from 'next/link'
-import dynamic from 'next/dynamic'
-
-const VideoHero = dynamic(() => import('@/components/VideoHero'), { ssr: false })
+import VideoHeroWrapper from '@/components/VideoHeroWrapper'
 
 const categories = [
   {

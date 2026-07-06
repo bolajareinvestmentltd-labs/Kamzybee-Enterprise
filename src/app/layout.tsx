@@ -5,6 +5,7 @@ import './globals.css'
 import AuthMenu from '@/components/AuthMenu'
 import CartProvider from '@/components/CartProvider'
 import CartLink from '@/components/CartLink'
+import MobileNavDock from '@/components/MobileNavDock'
 
 export const metadata: Metadata = {
   title: 'KamzyBee Global Enterprise',
@@ -41,6 +42,7 @@ export default function RootLayout({
             </div>
           </header>
           {children}
+          <MobileNavDock />
         </CartProvider>
       </body>
     </html>
