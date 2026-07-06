@@ -1,4 +1,7 @@
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
+
+const VideoHero = dynamic(() => import('@/components/VideoHero'), { ssr: false })
 
 const categories = [
   {
@@ -46,44 +49,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-[2rem] bg-slate-950 text-white shadow-2xl">
-            <video
-              className="absolute inset-0 h-full w-full object-cover"
-              autoPlay
-              muted
-              loop
-              playsInline
-              poster="/hero-poster.svg"
-              preload="metadata"
-            >
-              <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
-              <source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4" />
-            </video>
-            <div className="absolute inset-0 bg-slate-950/55" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.35),_transparent_45%),radial-gradient(circle_at_bottom_right,_rgba(14,165,233,0.25),_transparent_35%)]" />
-            <div className="relative grid gap-6 px-8 py-10">
-              <div className="space-y-4">
-                <p className="text-sm uppercase tracking-[0.3em] text-slate-300">Live product showcase</p>
-                <h2 className="text-3xl font-bold">Elegant inventory motion for modern buyers.</h2>
-                <p className="max-w-xl text-slate-200">
-                  A polished, video-rich hero experience that highlights premium devices, fast stock visibility, and a smooth shopping journey.
-                </p>
-              </div>
-
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="rounded-[1.5rem] border border-white/10 bg-white/10 p-5 backdrop-blur transition hover:-translate-y-1 hover:bg-white/15">
-                  <p className="text-sm uppercase tracking-[0.24em] text-slate-300">Phones</p>
-                  <p className="mt-3 text-xl font-semibold">Top models, verified stock</p>
-                  <p className="mt-2 text-sm text-slate-300">Search by brand, condition, and availability in one place.</p>
-                </div>
-                <div className="rounded-[1.5rem] border border-white/10 bg-white/10 p-5 backdrop-blur transition hover:-translate-y-1 hover:bg-white/15">
-                  <p className="text-sm uppercase tracking-[0.24em] text-slate-300">Laptops</p>
-                  <p className="mt-3 text-xl font-semibold">Business-ready inventory</p>
-                  <p className="mt-2 text-sm text-slate-300">Quality laptops with pricing and stock details at a glance.</p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <VideoHero />
         </section>
 
         <section className="mt-20 grid gap-8 lg:grid-cols-3">
