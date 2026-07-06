@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import Image from 'next/image'
 
 const categories = [
   {
@@ -47,14 +46,27 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-[2rem] bg-slate-950 px-8 py-10 text-white shadow-2xl">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.3),_transparent_45%),radial-gradient(circle_at_bottom_right,_rgba(14,165,233,0.25),_transparent_35%)]" />
-            <div className="relative grid gap-6">
+          <div className="relative overflow-hidden rounded-[2rem] bg-slate-950 text-white shadow-2xl">
+            <video
+              className="absolute inset-0 h-full w-full object-cover"
+              autoPlay
+              muted
+              loop
+              playsInline
+              poster="/hero-poster.svg"
+              preload="metadata"
+            >
+              <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
+              <source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4" />
+            </video>
+            <div className="absolute inset-0 bg-slate-950/55" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.35),_transparent_45%),radial-gradient(circle_at_bottom_right,_rgba(14,165,233,0.25),_transparent_35%)]" />
+            <div className="relative grid gap-6 px-8 py-10">
               <div className="space-y-4">
-                <p className="text-sm uppercase tracking-[0.3em] text-slate-400">Live product showcase</p>
+                <p className="text-sm uppercase tracking-[0.3em] text-slate-300">Live product showcase</p>
                 <h2 className="text-3xl font-bold">Elegant inventory motion for modern buyers.</h2>
-                <p className="text-slate-300">
-                  A dynamic experience that highlights key product categories with smooth animation and polished detail cards.
+                <p className="max-w-xl text-slate-200">
+                  A polished, video-rich hero experience that highlights premium devices, fast stock visibility, and a smooth shopping journey.
                 </p>
               </div>
 
@@ -68,36 +80,6 @@ export default function Home() {
                   <p className="text-sm uppercase tracking-[0.24em] text-slate-300">Laptops</p>
                   <p className="mt-3 text-xl font-semibold">Business-ready inventory</p>
                   <p className="mt-2 text-sm text-slate-300">Quality laptops with pricing and stock details at a glance.</p>
-                </div>
-              </div>
-
-              <div className="relative overflow-hidden rounded-[1.75rem] bg-slate-800/70 p-6">
-                <div className="absolute top-4 right-4 h-24 w-24 rounded-full bg-blue-500/20 blur-3xl" />
-                <div className="relative space-y-4">
-                  <p className="text-sm uppercase tracking-[0.24em] text-slate-300">Animated product deck</p>
-                  <div className="grid gap-3 sm:grid-cols-3">
-                    <div className="rounded-3xl border border-white/10 bg-slate-950/80 p-4 text-center shadow-xl transition hover:-translate-y-1 animate-float">
-                      <div className="mx-auto mb-3 h-20 w-20">
-                        <Image src="/logo.svg" alt="Phone" width={80} height={80} />
-                      </div>
-                      <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Phone</p>
-                      <p className="mt-2 text-lg font-semibold">Galaxy</p>
-                    </div>
-                    <div className="rounded-3xl border border-white/10 bg-slate-950/80 p-4 text-center shadow-xl transition hover:-translate-y-1 animate-float">
-                      <div className="mx-auto mb-3 h-20 w-20">
-                        <Image src="/globe.svg" alt="Laptop" width={80} height={80} />
-                      </div>
-                      <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Laptop</p>
-                      <p className="mt-2 text-lg font-semibold">ThinkPad</p>
-                    </div>
-                    <div className="rounded-3xl border border-white/10 bg-slate-950/80 p-4 text-center shadow-xl transition hover:-translate-y-1 animate-float">
-                      <div className="mx-auto mb-3 h-20 w-20">
-                        <Image src="/file.svg" alt="Accessory" width={80} height={80} />
-                      </div>
-                      <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Accessory</p>
-                      <p className="mt-2 text-lg font-semibold">Charger</p>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
