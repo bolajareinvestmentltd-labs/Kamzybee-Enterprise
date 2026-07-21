@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full antialiased">
-      <body className="min-h-full bg-[#F3F4F6] text-[#1F2937] antialiased">
+      <body className="min-h-full antialiased">
         <CartProvider>
           <header className="w-full">
             <div className="flex flex-col items-center justify-between gap-4 bg-[#0B3D91] px-6 py-4 text-white md:flex-row md:px-12">
