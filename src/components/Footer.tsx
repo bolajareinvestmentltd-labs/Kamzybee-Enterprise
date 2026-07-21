@@ -47,6 +47,7 @@ const socialLinks = [
 ]
 
 const trustBadges = [
+<<<<<<< HEAD
   {
     label: 'Secure Payments',
     icon: (
@@ -172,15 +173,31 @@ const paymentMethods = [
     ),
   },
 ]
+=======
+  'Secure Payments',
+  'Nationwide Delivery',
+  'Original Products',
+  'Warranty Available',
+  'Trusted Business',
+  'Customer Satisfaction',
+]
+
+const paymentMethods = ['Visa', 'Mastercard', 'Verve', 'Bank Transfer', 'Opay', 'Moniepoint']
+>>>>>>> ec604b7 (Refine frontend homepage and shared UX shell)
 
 export default function Footer() {
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState('')
   const year = 2026
 
+<<<<<<< HEAD
   const handleSubscribe = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
+=======
+  const handleSubscribe = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+>>>>>>> ec604b7 (Refine frontend homepage and shared UX shell)
     if (!email) {
       setStatus('Please enter a valid email address.')
       return
@@ -198,7 +215,11 @@ export default function Footer() {
     <footer className="bg-[#0F172A] text-[#F8FAFC]">
       <div className="mx-auto max-w-7xl px-6 py-16 sm:px-8 lg:px-10">
         <div className="grid gap-12 xl:grid-cols-[1.5fr_1fr]">
+<<<<<<< HEAD
           <div className="grid gap-10 md:grid-cols-2">
+=======
+          <div className="grid gap-10 md:grid-cols-2 xl:grid-cols-2">
+>>>>>>> ec604b7 (Refine frontend homepage and shared UX shell)
             <div className="space-y-5">
               <p className="text-sm font-semibold uppercase tracking-[0.35em] text-[#D4AF37]">Company</p>
               <ul className="space-y-3 text-sm text-[#E5E7EB]">
@@ -328,6 +349,7 @@ export default function Footer() {
             <div className="grid gap-3 sm:grid-cols-3 sm:gap-4">
               {trustBadges.map((badge) => (
                 <div
+<<<<<<< HEAD
                   key={badge.label}
                   className="flex items-center gap-3 rounded-2xl border border-[#475569] bg-[#0F172A]/70 px-4 py-3 text-sm text-[#E5E7EB] shadow-sm transition hover:border-[#D4AF37] hover:bg-[#111827]"
                 >
@@ -335,14 +357,25 @@ export default function Footer() {
                     {badge.icon}
                   </span>
                   {badge.label}
+=======
+                  key={badge}
+                  className="rounded-2xl border border-[#475569] bg-[#0F172A]/70 px-4 py-3 text-sm text-[#E5E7EB] shadow-sm transition hover:border-[#D4AF37] hover:bg-[#111827]"
+                >
+                  {badge}
+>>>>>>> ec604b7 (Refine frontend homepage and shared UX shell)
                 </div>
               ))}
             </div>
             <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-[#475569] bg-[#0F172A]/70 px-4 py-4 text-sm text-[#E5E7EB]">
               {paymentMethods.map((payment) => (
+<<<<<<< HEAD
                 <div key={payment.name} className="inline-flex items-center gap-2 rounded-full bg-[#111827]/90 px-3 py-2 text-xs uppercase tracking-[0.15em] text-[#E5E7EB]">
                   {payment.icon}
                   <span>{payment.name}</span>
+=======
+                <div key={payment} className="rounded-full bg-[#111827]/90 px-4 py-2 text-xs uppercase tracking-[0.15em] text-[#E5E7EB]">
+                  {payment}
+>>>>>>> ec604b7 (Refine frontend homepage and shared UX shell)
                 </div>
               ))}
             </div>

@@ -1,8 +1,9 @@
 "use client"
 
 import { useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
 
-export default function VideoHero({ poster = '/hero-poster-branded.svg' }: { poster?: string }) {
+export default function VideoHero({ poster = '/hero-poster.svg' }: { poster?: string }) {
   const ref = useRef<HTMLVideoElement | null>(null)
   const [playError, setPlayError] = useState(false)
   const [sources, setSources] = useState<{ src: string; type: string }[]>([])
@@ -69,6 +70,9 @@ export default function VideoHero({ poster = '/hero-poster-branded.svg' }: { pos
 
   return (
     <div className="relative overflow-hidden rounded-[2rem] aspect-video min-h-[260px] sm:min-h-[360px] bg-gradient-to-br from-[#0B3D91] via-[#1a5bb8] to-slate-950 text-white shadow-2xl group">
+      <div className="absolute inset-0">
+        <Image src={poster} alt="Hero poster" fill className="object-cover" />
+      </div>
       <video
         ref={ref}
         className="absolute inset-0 h-full w-full object-cover transition-opacity duration-500 group-hover:opacity-90"
@@ -100,6 +104,16 @@ export default function VideoHero({ poster = '/hero-poster-branded.svg' }: { pos
           <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
         </svg>
         Featured Products
+      </div>
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <div className="rounded-[2rem] border border-white/20 bg-white/10 px-4 py-3 text-center text-xs uppercase tracking-[0.35em] text-white/80 shadow-lg shadow-white/10 backdrop-blur-sm">
+          Play the video to see featured product motion
+        </div>
+      </div>
+      <div className="absolute top-6 right-6 hidden rounded-[1.75rem] border border-white/20 bg-white/10 px-4 py-3 text-white shadow-2xl shadow-white/10 backdrop-blur-sm md:block">
+        <p className="text-[10px] uppercase tracking-[0.35em] text-slate-200">Featured</p>
+        <p className="mt-2 text-sm font-semibold text-white">Samsung Galaxy S24</p>
+        <p className="mt-1 text-[11px] text-slate-200">Lowest price in stock now</p>
       </div>
     </div>
   )
