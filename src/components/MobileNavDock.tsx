@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 
 const navItems = [
@@ -14,8 +14,8 @@ const navItems = [
     ),
   },
   {
-    name: 'Inventory',
-    href: '/inventory',
+    name: 'Shop',
+    href: '/shop',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-5 w-5">
         <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
@@ -33,6 +33,16 @@ const navItems = [
       </svg>
     ),
   },
+  {
+    name: 'Contact',
+    href: '/contact',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-5 w-5">
+        <path d="M4 6h16v12H4z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="m4 8 8 6 8-6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+  },
 ]
 
 const categories = [
@@ -45,10 +55,6 @@ const categories = [
 
 export default function MobileNavDock() {
   const [trayOpen, setTrayOpen] = useState(false)
-  const [offsetX, setOffsetX] = useState(0)
-  const [isDragging, setIsDragging] = useState(false)
-  const startXRef = useRef<number | null>(null)
-  const startOffsetRef = useRef(0)
 
   useEffect(() => {
     if (!trayOpen) return
@@ -63,71 +69,31 @@ export default function MobileNavDock() {
     return () => window.removeEventListener('keydown', onEscape)
   }, [trayOpen])
 
-  useEffect(() => {
-    if (!isDragging) return
-
-    const handleMove = (event: PointerEvent) => {
-      if (startXRef.current === null) return
-      const delta = event.clientX - startXRef.current
-      const next = Math.max(-50, Math.min(50, startOffsetRef.current + delta))
-      setOffsetX(next)
-    }
-
-    const handleUp = () => {
-      setIsDragging(false)
-      startXRef.current = null
-      startOffsetRef.current = offsetX
-    }
-
-    window.addEventListener('pointermove', handleMove)
-    window.addEventListener('pointerup', handleUp)
-
-    return () => {
-      window.removeEventListener('pointermove', handleMove)
-      window.removeEventListener('pointerup', handleUp)
-    }
-  }, [isDragging, offsetX])
-
   return (
     <>
-      <div className="fixed inset-x-0 bottom-4 z-50 flex justify-center px-4 md:hidden" style={{ transform: `translateX(${offsetX}px)` }}>
-        <div className="w-full max-w-3xl rounded-full border border-white/30 bg-white/80 px-3 py-2 shadow-2xl shadow-slate-950/10 backdrop-blur-xl backdrop-saturate-150">
-          <div className="grid grid-cols-[auto_1fr_auto] gap-2 items-center">
-            <button
-              type="button"
-              onPointerDown={(event) => {
-                event.preventDefault()
-                setIsDragging(true)
-                startXRef.current = event.clientX
-                startOffsetRef.current = offsetX
-              }}
-              className="inline-flex h-10 w-10 cursor-grab items-center justify-center rounded-full border border-slate-200 bg-slate-100 text-slate-600 transition hover:bg-slate-200"
-              style={{ touchAction: 'pan-y' }}
-              aria-label="Drag mobile dock"
-            >
-              <span className="text-lg">⋯</span>
-            </button>
-            <div className="grid grid-cols-3 gap-2">
-              {navItems.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="inline-flex flex-col items-center justify-center rounded-full px-3 py-2 text-xs font-medium text-slate-700 transition hover:bg-slate-100 hover:text-slate-900"
-                >
-                  {item.icon}
-                  <span className="mt-1 hidden text-[11px] font-semibold sm:block">{item.name}</span>
-                </Link>
-              ))}
-            </div>
+      <div className="fixed inset-x-0 bottom-0 z-40 flex justify-center px-4 py-4 md:hidden">
+        <div className="w-full max-w-md rounded-3xl border border-[var(--border)] bg-[color:rgba(255,255,255,0.95)] px-3 py-3 shadow-2xl shadow-slate-950/20 backdrop-blur-xl">
+          <div className="grid grid-cols-4 gap-1">
+            {navItems.map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                className="inline-flex flex-col items-center justify-center rounded-2xl px-2 py-2 text-xs font-medium text-[var(--foreground)] transition hover:bg-[#F8F9FA] hover:text-[#0B3D91]"
+              >
+                {item.icon}
+                <span className="mt-1 text-[10px] font-semibold">{item.name}</span>
+              </Link>
+            ))}
             <button
               type="button"
               onClick={() => setTrayOpen(true)}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-slate-900 text-white transition hover:bg-slate-800"
-              aria-label="Open categories tray"
+              className="inline-flex flex-col items-center justify-center rounded-2xl bg-[#0B3D91] px-2 py-2 text-white transition hover:bg-[#0A3078]"
+              aria-label="Open categories"
             >
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-5 w-5">
                 <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
               </svg>
+              <span className="mt-1 text-[10px] font-semibold">Menu</span>
             </button>
           </div>
         </div>
@@ -136,34 +102,35 @@ export default function MobileNavDock() {
       {trayOpen ? (
         <>
           <div
-            className="fixed inset-0 z-40 bg-slate-950/50 backdrop-blur-sm transition-opacity duration-300"
+            className="fixed inset-0 z-50 bg-slate-950/50 backdrop-blur-sm transition-opacity duration-300"
             onClick={() => setTrayOpen(false)}
           />
-          <div className="fixed inset-x-4 bottom-4 z-50 w-[calc(100%-2rem)] max-w-3xl rounded-[2rem] border border-slate-200/70 bg-white/95 p-5 shadow-2xl shadow-slate-950/20 backdrop-blur-xl transition duration-300">
-            <div className="flex items-start justify-between gap-3">
+          <div className="fixed inset-x-4 bottom-24 z-50 w-[calc(100%-2rem)] rounded-3xl border border-[var(--border)] bg-[var(--card-bg)] p-4 shadow-2xl shadow-slate-950/20 backdrop-blur-xl transition duration-300">
+            <div className="mb-4 flex items-start justify-between gap-3">
               <div>
-                <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Categories</p>
-                <p className="mt-2 text-sm font-semibold text-slate-900">Explore quick access topics</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#0B3D91]">Categories</p>
+                <p className="mt-1 text-sm font-semibold text-[var(--foreground)]">Browse by product type</p>
               </div>
               <button
                 type="button"
                 onClick={() => setTrayOpen(false)}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-slate-200 bg-slate-100 text-slate-600 transition hover:bg-slate-200"
-                aria-label="Close categories tray"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#F8F9FA] text-[#0B3D91] transition hover:bg-[#E5E7EB]"
+                aria-label="Close tray"
               >
                 <span className="text-lg font-bold">×</span>
               </button>
             </div>
 
-            <div className="mt-5 grid gap-3">
+            <div className="grid gap-2">
               {categories.map((category) => (
-                <button
+                <Link
                   key={category}
-                  type="button"
-                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 text-left text-sm font-medium text-slate-800 transition hover:border-slate-300 hover:bg-slate-100"
+                  href={`/shop?category=${encodeURIComponent(category)}`}
+                  className="w-full rounded-2xl border border-[var(--border)] bg-[#F8F9FA] px-4 py-3 text-left text-sm font-medium text-[var(--foreground)] transition hover:border-[#0B3D91] hover:bg-[#F0F4FF]"
+                  onClick={() => setTrayOpen(false)}
                 >
                   {category}
-                </button>
+                </Link>
               ))}
             </div>
           </div>

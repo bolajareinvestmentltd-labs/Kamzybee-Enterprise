@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import Image from 'next/image'
 import Link from 'next/link'
 import './globals.css'
 import AuthMenu from '@/components/AuthMenu'
@@ -20,67 +19,41 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="h-full antialiased">
-      <body className="min-h-full antialiased">
+    <html lang="en" className="h-full antialiased" suppressHydrationWarning>
+      <body className="min-h-full bg-[var(--background)] text-[var(--foreground)]">
         <CartProvider>
-          <header className="w-full">
-            <div className="flex flex-col items-center justify-between gap-4 bg-[#0B3D91] px-6 py-4 text-white md:flex-row md:px-12">
+          <header className="sticky top-0 z-40 border-b border-[var(--border)] bg-[color:rgba(255,255,255,0.92)] backdrop-blur dark:bg-[color:rgba(15,23,42,0.92)]">
+            <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4 sm:px-8 lg:px-10">
               <Link href="/" className="flex items-center gap-3">
-                <div className="rounded-lg bg-[#F4B400] p-2 text-[#0B3D91]">
-                  <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm7 17H5V8h14v12zm-7-8c-1.66 0-3-1.34-3-3H7c0 2.76 2.24 5 5 5s5-2.24 5-5h-2c0 1.66-1.34 3-3 3z" />
-                  </svg>
-                </div>
+                <img src="/images/brand/brand-official.png" alt="KamzyBee logo" className="h-10 w-10 object-contain" />
                 <div>
-                  <span className="block text-2xl font-bold leading-none tracking-wide">KamzyBee</span>
-                  <span className="text-xs font-medium uppercase tracking-[0.2em] text-[#F4B400]">Store</span>
+                  <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[#0B3D91]">KamzyBee</p>
+                  <p className="text-xs text-[var(--text-light)]">Global Enterprise</p>
                 </div>
               </Link>
 
-              <div className="flex w-full max-w-xl items-center overflow-hidden rounded-md bg-white shadow-inner">
-                <input
-                  type="text"
-                  placeholder="Search for products..."
-                  className="w-full px-4 py-2.5 text-sm text-[#1F2937] focus:outline-none"
-                />
-                <button
-                  type="button"
-                  aria-label="Search products"
-                  className="bg-[#0B3D91] px-5 py-2.5 text-white transition-colors hover:bg-opacity-90"
-                >
-                  <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-4.35-4.35m0 0A7.5 7.5 0 1 0 6.75 6.75a7.5 7.5 0 0 0 10.6 10.6Z" />
-                  </svg>
-                </button>
+              <div className="hidden items-center gap-6 lg:flex">
+                <nav className="flex items-center gap-5 text-sm font-medium text-[var(--text-light)]">
+                  <Link href="/" className="transition hover:text-[#0B3D91]">Home</Link>
+                  <Link href="/shop" className="transition hover:text-[#0B3D91]">Shop</Link>
+                  <Link href="/about" className="transition hover:text-[#0B3D91]">About</Link>
+                  <Link href="/contact" className="transition hover:text-[#0B3D91]">Contact</Link>
+                </nav>
               </div>
 
-              <div className="flex items-center gap-6">
-                <Link href="/auth" className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-[#F4B400]">
-                  <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Zm-10.5 12.75a6.75 6.75 0 0 1 13.5 0" />
-                  </svg>
-                  <span>My Account</span>
-                </Link>
+              <div className="flex items-center gap-3">
                 <CartLink />
                 <ThemeToggle />
                 <AuthMenu />
               </div>
             </div>
-
-            <nav className="border-b border-gray-200 bg-white px-6 py-3.5 shadow-sm md:px-12">
-              <ul className="flex flex-wrap items-center justify-center gap-8 text-sm font-semibold tracking-wide text-[#1F2937]">
-                <li><Link href="/" className="text-[#0B3D91] hover:opacity-80">HOME</Link></li>
-                <li><Link href="/inventory" className="transition-colors hover:text-[#0B3D91]">SHOP</Link></li>
-                <li><Link href="/about" className="transition-colors hover:text-[#0B3D91]">ABOUT US</Link></li>
-                <li><Link href="/contact" className="transition-colors hover:text-[#0B3D91]">CONTACT US</Link></li>
-              </ul>
-            </nav>
           </header>
 
-          <main>{children}</main>
+          <main className="pb-28 md:pb-0">
+            {children}
+          </main>
 
           <Footer />
-
           <MobileNavDock />
         </CartProvider>
       </body>

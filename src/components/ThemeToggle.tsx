@@ -46,29 +46,28 @@ export default function ThemeToggle() {
     applyTheme(nextTheme)
   }
 
+  const isDark = theme === 'dark'
+
   return (
     <button
       type="button"
       onClick={handleToggle}
-      className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-900 transition hover:border-slate-400 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-[#0B3D91]/40 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:hover:border-slate-400 dark:hover:bg-slate-800"
-      aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
+      className="inline-flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] px-3 py-2 text-sm font-medium text-[var(--foreground)] transition hover:border-[#D4AF37] focus:outline-none"
+      aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
     >
-      {theme === 'dark' ? (
-        <span className="flex items-center gap-2">
+      <span className="flex items-center gap-2">
+        {isDark ? (
           <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z" />
           </svg>
-          Light
-        </span>
-      ) : (
-        <span className="flex items-center gap-2">
+        ) : (
           <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="12" cy="12" r="5" />
             <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
           </svg>
-          Dark
-        </span>
-      )}
+        )}
+        <span>{isDark ? 'Light' : 'Dark'}</span>
+      </span>
     </button>
   )
 }
