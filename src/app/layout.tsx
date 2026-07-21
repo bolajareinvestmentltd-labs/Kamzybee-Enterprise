@@ -6,6 +6,8 @@ import AuthMenu from '@/components/AuthMenu'
 import CartProvider from '@/components/CartProvider'
 import CartLink from '@/components/CartLink'
 import MobileNavDock from '@/components/MobileNavDock'
+import ThemeToggle from '@/components/ThemeToggle'
+import Footer from '@/components/Footer'
 
 export const metadata: Metadata = {
   title: 'KamzyBee Global Enterprise',
@@ -60,6 +62,7 @@ export default function RootLayout({
                   <span>My Account</span>
                 </Link>
                 <CartLink />
+                <ThemeToggle />
                 <AuthMenu />
               </div>
             </div>
@@ -76,19 +79,7 @@ export default function RootLayout({
 
           <main>{children}</main>
 
-          <footer className="border-t border-gray-200 bg-white px-6 py-8 text-sm text-[#6B7280] md:px-12">
-            <div className="mx-auto flex max-w-7xl flex-col gap-4 md:flex-row md:items-center md:justify-between">
-              <div>
-                <p className="font-semibold text-[#0B3D91]">KamzyBee Store</p>
-                <p>Premium tech, trusted service, and fast delivery for every shopper.</p>
-              </div>
-              <div className="flex flex-wrap gap-4">
-                <Link href="/inventory" className="hover:text-[#0B3D91]">Inventory</Link>
-                <Link href="/about" className="hover:text-[#0B3D91]">About</Link>
-                <Link href="/contact" className="hover:text-[#0B3D91]">Contact</Link>
-              </div>
-            </div>
-          </footer>
+          <Footer />
 
           <MobileNavDock />
         </CartProvider>

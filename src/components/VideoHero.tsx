@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-export default function VideoHero({ poster = '/hero-poster.svg' }: { poster?: string }) {
+export default function VideoHero({ poster = '/hero-poster-branded.svg' }: { poster?: string }) {
   const ref = useRef<HTMLVideoElement | null>(null)
   const [playError, setPlayError] = useState(false)
   const [sources, setSources] = useState<{ src: string; type: string }[]>([])
@@ -68,10 +68,10 @@ export default function VideoHero({ poster = '/hero-poster.svg' }: { poster?: st
   }, [sources])
 
   return (
-    <div className="relative overflow-hidden rounded-[2rem] aspect-video min-h-[260px] sm:min-h-[360px] bg-slate-950 text-white shadow-2xl">
+    <div className="relative overflow-hidden rounded-[2rem] aspect-video min-h-[260px] sm:min-h-[360px] bg-gradient-to-br from-[#0B3D91] via-[#1a5bb8] to-slate-950 text-white shadow-2xl group">
       <video
         ref={ref}
-        className="absolute inset-0 h-full w-full object-cover"
+        className="absolute inset-0 h-full w-full object-cover transition-opacity duration-500 group-hover:opacity-90"
         autoPlay
         muted
         loop
@@ -85,14 +85,22 @@ export default function VideoHero({ poster = '/hero-poster.svg' }: { poster?: st
         ))}
       </video>
 
-      <div className="absolute inset-0 bg-slate-950/55" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.35),_transparent_45%),radial-gradient(circle_at_bottom_right,_rgba(14,165,233,0.25),_transparent_35%)]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0B3D91]/40 via-[#0B3D91]/50 to-slate-950/60" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(244,180,0,0.25),_transparent_50%),radial-gradient(circle_at_bottom_right,_rgba(34,197,94,0.15),_transparent_40%)]"/>
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 bg-[radial-gradient(circle_at_center,_rgba(244,180,0,0.1),_transparent_60%)]"/>
 
       {playError && (
-        <div className="absolute inset-0 flex items-center justify-center">
+        <div className="absolute inset-0 flex items-center justify-center animate-fade-in">
           <img src={poster} alt="hero poster" className="h-full w-full object-cover" />
         </div>
       )}
+      
+      <div className="absolute bottom-6 left-6 flex items-center gap-2 bg-[#0B3D91]/80 backdrop-blur-md px-4 py-2 rounded-full text-sm font-semibold text-[#F4B400] opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+        </svg>
+        Featured Products
+      </div>
     </div>
   )
 }

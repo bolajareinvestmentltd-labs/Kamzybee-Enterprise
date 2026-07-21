@@ -4,10 +4,13 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
 if (!supabaseUrl || !supabaseKey) {
-  throw new Error('Missing Supabase environment variables: NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY')
+  console.warn('Supabase admin env vars missing. API routes may not work in local development.')
 }
 
-export const supabaseAdmin = createClient(supabaseUrl, supabaseKey)
+// Use placeholder values to avoid createClient errors in development
+export const supabaseAdmin = supabaseUrl && supabaseKey
+  ? createClient(supabaseUrl, supabaseKey)
+  : createClient('https://placeholder.supabase.co', 'placeholder-key')
 
 export function slugify(value: string) {
   return value

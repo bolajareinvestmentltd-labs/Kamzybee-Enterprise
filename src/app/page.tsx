@@ -120,6 +120,7 @@ export default function Home() {
               </Link>
               <Link
                 href="/inventory"
+                title="Latest update pushed to main"
                 className="rounded-md border-2 border-white px-8 py-3 text-sm font-semibold uppercase tracking-wider text-white transition-all hover:bg-white hover:text-[#0B3D91]"
               >
                 Explore Deals
