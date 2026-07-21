@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 
 const navItems = [
@@ -45,6 +45,10 @@ const categories = [
 
 export default function MobileNavDock() {
   const [trayOpen, setTrayOpen] = useState(false)
+  const [offsetX, setOffsetX] = useState(0)
+  const [isDragging, setIsDragging] = useState(false)
+  const startXRef = useRef<number | null>(null)
+  const startOffsetRef = useRef(0)
 
   useEffect(() => {
     if (!trayOpen) return
@@ -59,31 +63,71 @@ export default function MobileNavDock() {
     return () => window.removeEventListener('keydown', onEscape)
   }, [trayOpen])
 
+  useEffect(() => {
+    if (!isDragging) return
+
+    const handleMove = (event: PointerEvent) => {
+      if (startXRef.current === null) return
+      const delta = event.clientX - startXRef.current
+      const next = Math.max(-50, Math.min(50, startOffsetRef.current + delta))
+      setOffsetX(next)
+    }
+
+    const handleUp = () => {
+      setIsDragging(false)
+      startXRef.current = null
+      startOffsetRef.current = offsetX
+    }
+
+    window.addEventListener('pointermove', handleMove)
+    window.addEventListener('pointerup', handleUp)
+
+    return () => {
+      window.removeEventListener('pointermove', handleMove)
+      window.removeEventListener('pointerup', handleUp)
+    }
+  }, [isDragging, offsetX])
+
   return (
     <>
-      <div className="fixed inset-x-0 bottom-4 z-50 flex justify-center px-4 md:hidden">
+      <div className="fixed inset-x-0 bottom-4 z-50 flex justify-center px-4 md:hidden" style={{ transform: `translateX(${offsetX}px)` }}>
         <div className="w-full max-w-3xl rounded-full border border-white/30 bg-white/80 px-3 py-2 shadow-2xl shadow-slate-950/10 backdrop-blur-xl backdrop-saturate-150">
-          <div className="grid grid-cols-4 gap-2">
-            {navItems.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="inline-flex flex-col items-center justify-center rounded-full px-3 py-2 text-xs font-medium text-slate-700 transition hover:bg-slate-100 hover:text-slate-900"
-              >
-                {item.icon}
-                <span className="mt-1 hidden text-[11px] font-semibold sm:block">{item.name}</span>
-              </Link>
-            ))}
+          <div className="grid grid-cols-[auto_1fr_auto] gap-2 items-center">
+            <button
+              type="button"
+              onPointerDown={(event) => {
+                event.preventDefault()
+                setIsDragging(true)
+                startXRef.current = event.clientX
+                startOffsetRef.current = offsetX
+              }}
+              className="inline-flex h-10 w-10 cursor-grab items-center justify-center rounded-full border border-slate-200 bg-slate-100 text-slate-600 transition hover:bg-slate-200"
+              style={{ touchAction: 'pan-y' }}
+              aria-label="Drag mobile dock"
+            >
+              <span className="text-lg">⋯</span>
+            </button>
+            <div className="grid grid-cols-3 gap-2">
+              {navItems.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className="inline-flex flex-col items-center justify-center rounded-full px-3 py-2 text-xs font-medium text-slate-700 transition hover:bg-slate-100 hover:text-slate-900"
+                >
+                  {item.icon}
+                  <span className="mt-1 hidden text-[11px] font-semibold sm:block">{item.name}</span>
+                </Link>
+              ))}
+            </div>
             <button
               type="button"
               onClick={() => setTrayOpen(true)}
-              className="inline-flex flex-col items-center justify-center rounded-full bg-slate-900 px-3 py-2 text-white transition hover:bg-slate-800"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-slate-900 text-white transition hover:bg-slate-800"
               aria-label="Open categories tray"
             >
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-5 w-5">
                 <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
               </svg>
-              <span className="mt-1 hidden text-[11px] font-semibold sm:block">Menu</span>
             </button>
           </div>
         </div>

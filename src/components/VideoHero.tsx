@@ -5,6 +5,47 @@ import { useEffect, useRef, useState } from 'react'
 export default function VideoHero({ poster = '/hero-poster.svg' }: { poster?: string }) {
   const ref = useRef<HTMLVideoElement | null>(null)
   const [playError, setPlayError] = useState(false)
+  const [sources, setSources] = useState<{ src: string; type: string }[]>([])
+
+  useEffect(() => {
+    // runtime: check for local files first to avoid 404s, otherwise fall back to public samples
+    let mounted = true
+
+    const localCandidates = [
+      { src: '/videos/hero.webm', type: 'video/webm' },
+      { src: '/videos/hero.mp4', type: 'video/mp4' },
+    ]
+
+    const fallback = [
+      { src: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4', type: 'video/mp4' },
+      { src: 'https://www.w3schools.com/html/mov_bbb.mp4', type: 'video/mp4' },
+    ]
+
+    async function probe() {
+      try {
+        for (const cand of localCandidates) {
+          try {
+            const r = await fetch(cand.src, { method: 'HEAD' })
+            if (r.ok) {
+              if (!mounted) return
+              setSources(localCandidates)
+              return
+            }
+          } catch (_) {
+            // ignore and try next
+          }
+        }
+      } finally {
+        if (mounted && sources.length === 0) setSources(fallback)
+      }
+    }
+
+    probe()
+
+    return () => {
+      mounted = false
+    }
+  }, [])
 
   useEffect(() => {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -15,21 +56,19 @@ export default function VideoHero({ poster = '/hero-poster.svg' }: { poster?: st
 
     const tryPlay = async () => {
       try {
-        // Ensure muted for autoplay compliance
         v.muted = true
         v.playsInline = true
         await v.play()
       } catch (err) {
-        // Some browsers still block autoplay; show poster fallback
         setPlayError(true)
       }
     }
 
     tryPlay()
-  }, [])
+  }, [sources])
 
   return (
-    <div className="relative overflow-hidden rounded-[2rem] bg-slate-950 text-white shadow-2xl">
+    <div className="relative overflow-hidden rounded-[2rem] aspect-video min-h-[260px] sm:min-h-[360px] bg-slate-950 text-white shadow-2xl">
       <video
         ref={ref}
         className="absolute inset-0 h-full w-full object-cover"
@@ -38,10 +77,12 @@ export default function VideoHero({ poster = '/hero-poster.svg' }: { poster?: st
         loop
         playsInline
         poster={poster}
-        preload="auto"
+        preload="metadata"
       >
-        <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4" />
-        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
+        {sources.map((s) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <source key={s.src} src={s.src} type={s.type} />
+        ))}
       </video>
 
       <div className="absolute inset-0 bg-slate-950/55" />
