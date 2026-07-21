@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
 
 interface Product {
   id: string
@@ -20,15 +19,15 @@ interface Product {
 
 export default function InventoryPage() {
   const [products, setProducts] = useState<Product[]>([])
-  const searchParams = useSearchParams()
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    const categoryParam = searchParams.get('category')
-    const searchParam = searchParams.get('search')
+    const urlSearchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null
+    const categoryParam = urlSearchParams?.get('category')
+    const searchParam = urlSearchParams?.get('search')
 
     if (categoryParam) {
       setSelectedCategory(categoryParam)
@@ -64,7 +63,7 @@ export default function InventoryPage() {
     }
 
     fetchData()
-  }, [searchParams])
+  }, [])
 
   const categories = useMemo(() => {
     return Array.from(new Set(products.map((product) => product.category))).filter(Boolean)
