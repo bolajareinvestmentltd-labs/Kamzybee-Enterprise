@@ -25,7 +25,14 @@ function getAwardBadge(title: string) {
 }
 
 export default async function AboutPage() {
-  const data = await client.fetch(query)
+  let data = null
+  try {
+    data = await client.fetch(query)
+  } catch (error) {
+    console.warn('Sanity fetch error:', error)
+    data = null
+  }
+
   const ceoImageUrl = typeof data?.ceoImage?.asset?.url === 'string' && data.ceoImage.asset.url.length > 0
     ? data.ceoImage.asset.url
     : '/images/about/ceo-portrait.jpeg'

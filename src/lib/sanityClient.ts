@@ -5,7 +5,8 @@ export const client = {
     const apiVersion = process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2024-12-02'
 
     if (!projectId || !dataset) {
-      throw new Error('Missing Sanity configuration env vars')
+      console.warn('Sanity env vars missing; using fallback content.')
+      return null
     }
 
     const url = `https://${projectId}.api.sanity.io/v${apiVersion}/data/query/${dataset}?query=${encodeURIComponent(
@@ -13,6 +14,11 @@ export const client = {
     )}`
 
     const res = await fetch(url)
+    if (!res.ok) {
+      console.warn('Sanity fetch failed', res.status, res.statusText)
+      return null
+    }
+
     const json = await res.json()
     return json.result
   },
