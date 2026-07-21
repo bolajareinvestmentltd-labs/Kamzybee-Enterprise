@@ -142,6 +142,20 @@ export default function Home() {
                 Verified Rotary members get instant premium pricing on top brand devices and accessories.
               </p>
             </div>
+
+            <div className="flex items-center justify-between gap-3 rounded-3xl border border-white/15 bg-white/10 px-4 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-white shadow-lg shadow-[#0B3D91]/30 transition md:hidden">
+              <span className="flex items-center gap-2">
+                <span className="grid h-8 w-8 place-items-center rounded-full bg-[#F4B400] text-[#0B3D91] shadow-inner shadow-[#F4B400]/30 animate-spin-slow">
+                  <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M12 2a10 10 0 1 0 10 10" />
+                    <path d="M12 2v4" strokeLinecap="round" />
+                    <path d="M16 4.9 14.2 7.7" strokeLinecap="round" />
+                  </svg>
+                </span>
+                20% Rotary Member Savings
+              </span>
+              <span className="text-[10px] text-[#E5E7EB]">Verified Rotary members get premium pricing</span>
+            </div>
           </div>
 
           <div className="relative z-10 flex min-h-[300px] items-center justify-center lg:col-span-6 lg:h-full animate-fade-in [animation-delay:300ms]">
@@ -152,7 +166,7 @@ export default function Home() {
           </div>
 
           <div className="hidden md:flex absolute right-0 top-1/2 z-20 max-w-[180px] -translate-y-1/2 translate-x-4 flex-col items-center gap-2 rounded-l-3xl border-y-4 border-l-4 border-white/30 bg-gradient-to-b from-[#22C55E] to-[#16A34A] px-8 py-6 text-white shadow-2xl animate-slide-up hover:shadow-green-600/50 transition-shadow duration-300">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full border-4 border-dashed border-white animate-spin" style={{animationDuration: '3s'}}>
+            <div className="flex h-12 w-12 items-center justify-center rounded-full border-4 border-dashed border-white animate-spin" style={{ animationDuration: '3s' }}>
               <svg className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -160,6 +174,26 @@ export default function Home() {
             </div>
             <span className="text-2xl font-black leading-none tracking-tight animate-pulse">20% OFF</span>
             <span className="text-center text-[10px] font-semibold uppercase tracking-wider text-green-50">For Rotary/Rotaract Members</span>
+          </div>
+
+          <div className="absolute left-1/2 top-full z-20 mt-6 flex w-[calc(100%-2rem)] max-w-sm -translate-x-1/2 flex-col items-center gap-3 rounded-3xl border border-white/20 bg-gradient-to-r from-[#22C55E] to-[#16A34A] px-4 py-4 text-white shadow-2xl md:hidden">
+            <div className="flex w-full items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <span className="grid h-10 w-10 place-items-center rounded-full bg-white text-[#0B3D91] shadow-inner shadow-[#F4B400]/30 animate-spin-slow">
+                  <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M12 2a10 10 0 1 0 10 10" />
+                    <path d="M12 2v4" strokeLinecap="round" />
+                    <path d="M16 4.9 14.2 7.7" strokeLinecap="round" />
+                  </svg>
+                </span>
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em]">20% OFF</p>
+                  <p className="text-[10px] uppercase tracking-[0.15em] text-white/80">Rotary / Rotaract members</p>
+                </div>
+              </div>
+              <span className="rounded-full border border-white/25 bg-white/10 px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-white">Member</span>
+            </div>
+            <p className="text-center text-[11px] text-white/85">Verified Rotary members get instant premium pricing on top brand devices and accessories.</p>
           </div>
         </section>
 
@@ -186,12 +220,16 @@ export default function Home() {
 
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
               {categories.map((item) => (
-                <div key={item.title} className="group cursor-pointer">
+                <Link
+                  key={item.title}
+                  href={`/inventory?category=${encodeURIComponent(item.title)}`}
+                  className="group"
+                >
                   <div className="flex h-36 items-center justify-center rounded-xl border border-gray-100 bg-[#F8F9FA] p-6 shadow-sm transition-all group-hover:border-[#0B3D91]/30 group-hover:shadow">
                     {item.icon}
                   </div>
                   <p className="mt-3 text-center text-xs font-bold text-[#1F2937] transition-colors group-hover:text-[#0B3D91]">{item.title}</p>
-                </div>
+                </Link>
               ))}
             </div>
           </section>

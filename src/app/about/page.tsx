@@ -1,9 +1,36 @@
+import Image from 'next/image'
 import { client } from '@/lib/sanityClient'
 
 const query = '*[_type == "aboutPage"][0]{companyBio, ceoName, ceoBio, ceoImage, awards[]{title,year,image}, cacCertificateImage}'
 
+const defaultAwards = [
+  { title: 'NR-MDIO (Meritorious Service Award)', year: '2021/2022' },
+  { title: 'NR-MDIO (Award of Appreciation)', year: '2024/2025' },
+  { title: 'Al-Hikmah University (Philanthropic Leadership Awards)', year: 'N/A' },
+  { title: 'Rotary Club of Ilorin GRA (Certificate of Appreciation)', year: '2024/2025' },
+  { title: 'Rotaract District 9125 (Best Dressed Rotaractor)', year: '2015/2016' },
+  { title: 'Rotaract Club of Ilorin GRA (Certificate of Appreciation)', year: '2023/2024' },
+  { title: 'Zone J Rotaract District 9125 (Appreciation Award)', year: '2025/2025' },
+  { title: 'Rotary Club of Ilorin GRA (Award of Excellence)', year: '2019/2020' },
+  { title: 'Rotaract Club of Ilorin GRA (Certificate of Appreciation)', year: '2023/2024' },
+  { title: 'Offa Youth Progressive Association (Humanitarian Service Award)', year: '2023' },
+  { title: 'ONE (Certificate of Appreciation)', year: '2024' },
+  { title: 'Oyo State, Rotaract District 9126 (Exceptional Leadership Award)', year: '2026' },
+  { title: 'Ecolerite Institute for Peace Advancement (Fellow)', year: 'N/A' },
+  { title: 'Paul Harris Fellow', year: 'N/A' },
+]
+
+function getAwardBadge(title: string) {
+  return /certificate|cert/i.test(title) ? '/images/awards/certificate-badge.svg' : '/images/awards/award-badge.svg'
+}
+
 export default async function AboutPage() {
   const data = await client.fetch(query)
+  const ceoImageUrl = typeof data?.ceoImage?.asset?.url === 'string' && data.ceoImage.asset.url.length > 0
+    ? data.ceoImage.asset.url
+    : '/images/about/ceo-portrait.jpeg'
+  const awardEntries = Array.isArray(data?.awards) && data.awards.length > 0 ? data.awards : defaultAwards
+  const ceoIsRemote = /^https?:\/\//i.test(ceoImageUrl)
 
   return (
     <div className="min-h-screen bg-slate-50 py-16">
@@ -14,17 +41,20 @@ export default async function AboutPage() {
         </section>
 
         <section className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-3">
+          <div className="md:col-span-1">
+            <div className="overflow-hidden rounded-[1.5rem] shadow-sm">
+              {ceoIsRemote ? (
+                <img src={ceoImageUrl} alt="CEO portrait" className="h-96 w-full object-cover" />
+              ) : (
+                <Image src={ceoImageUrl} alt="CEO portrait" width={800} height={1000} className="h-96 w-full object-cover" priority />
+              )}
+            </div>
+          </div>
+
           <div className="md:col-span-2">
             <h2 className="text-2xl font-semibold">Our Mission & Values</h2>
             <div className="mt-4 prose max-w-none">{data?.companyBio && <PortableText value={data.companyBio} />}</div>
           </div>
-
-          <aside>
-            <h3 className="text-xl font-semibold">Leadership</h3>
-            <p className="mt-2 font-medium">{data?.ceoName ?? 'Kamaldeen Adeshina Oyewumi, PHF, FIEPA'}</p>
-            <p className="mt-1 text-sm text-slate-500">Chief Executive Officer, Kamzybee Global Enterprise | Rotaract Leader | Entrepreneur | Business Strategist | Community Development Advocate</p>
-            <div className="mt-3 prose">{data?.ceoBio && <PortableText value={data.ceoBio} />}</div>
-          </aside>
         </section>
 
         <section className="mt-12 rounded-[1.5rem] border border-slate-200 bg-white p-8 shadow-sm">
@@ -57,11 +87,27 @@ export default async function AboutPage() {
         <section className="mt-12">
           <h2 className="text-2xl font-semibold">Certifications & Awards</h2>
           <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
-            {data?.awards?.map((a: any, idx: number) => (
-              <div key={idx} className="rounded-lg border bg-white p-4 shadow-sm">
-                <p className="font-semibold">{a.title} <span className="text-sm text-slate-500">{a.year}</span></p>
-              </div>
-            ))}
+            {awardEntries.map((a: any, idx: number) => {
+              const title = a.title || 'Recognition'
+              const year = a.year ? `${a.year}` : 'Honored'
+              const badge = getAwardBadge(title)
+              const imageUrl = typeof a?.image?.asset?.url === 'string' ? a.image.asset.url : badge
+              const isRemoteImage = /^https?:\/\//i.test(imageUrl)
+
+              return (
+                <div key={idx} className="rounded-lg border bg-white p-4 shadow-sm">
+                  <div className="mb-4 flex items-center justify-center rounded-xl border border-slate-100 bg-slate-50 p-3">
+                    {isRemoteImage ? (
+                      <img src={imageUrl} alt={`${title} badge`} className="h-16 w-16 rounded-lg object-cover" />
+                    ) : (
+                      <Image src={imageUrl} alt={`${title} badge`} width={88} height={88} className="h-16 w-16 object-contain" />
+                    )}
+                  </div>
+                  <p className="font-semibold">{title}</p>
+                  <p className="mt-2 text-sm text-slate-500">{year}</p>
+                </div>
+              )
+            })}
           </div>
         </section>
       </div>
@@ -70,7 +116,6 @@ export default async function AboutPage() {
 }
 
 function PortableText({ value }: { value: any }) {
-  // Minimal Portable Text rendering to avoid adding dependencies.
   if (!value) return null
   return (
     <div>

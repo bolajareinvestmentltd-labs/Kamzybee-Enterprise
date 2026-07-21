@@ -6,6 +6,10 @@ export async function GET(request: NextRequest) {
   const search = request.nextUrl.searchParams.get('search')
   const slug = request.nextUrl.searchParams.get('slug')
 
+  if (!supabaseAdmin) {
+    return NextResponse.json({ error: 'Supabase is not configured' }, { status: 500 })
+  }
+
   const { data, error } = await supabaseAdmin
     .from('products')
     .select(`id, model, remarks, category_id, brand_id, variants(unit_price_ngn, quantity, condition, storage_options, colors), categories(name), brands(name)`)

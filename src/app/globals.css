@@ -20,9 +20,18 @@
   }
 }
 
+html.light,
 :root.light {
   --background: #FFFFFF;
   --foreground: #111827;
+  color-scheme: light;
+}
+
+html.dark,
+:root.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  color-scheme: dark;
 }
 
 body {
@@ -31,9 +40,16 @@ body {
   font-family: 'Poppins', Arial, Helvetica, sans-serif;
 }
 
+html.light body,
 .light body {
   background: #FFFFFF;
   color: #111827;
+}
+
+html.dark body,
+.dark body {
+  background: #0a0a0a;
+  color: #ededed;
 }
 
 @keyframes float {
