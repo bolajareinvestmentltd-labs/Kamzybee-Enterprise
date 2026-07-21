@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import RotaryDiscountComponent from '@/components/RotaryDiscountComponent'
 import VideoHeroWrapper from '@/components/VideoHeroWrapper'
 
 const featureCards = [
@@ -99,7 +100,6 @@ const categories = [
 
 export default function Home() {
   return (
-<<<<<<< HEAD
     <main className="min-h-screen bg-[#F3F4F6] text-[#1F2937] antialiased">
       <div className="mx-auto flex max-w-7xl flex-col gap-8 px-4 py-8 md:px-6">
         <section className="relative grid min-h-[420px] items-center gap-8 overflow-hidden rounded-[1.5rem] bg-gradient-to-br from-[#0B3D91] via-[#1a5bb8] to-[#0B3D91] p-8 text-white shadow-2xl md:p-12 lg:grid-cols-12 before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_top_right,_rgba(244,180,0,0.15),_transparent_60%)] before:pointer-events-none">
@@ -142,54 +142,6 @@ export default function Home() {
               <p className="max-w-xl text-sm text-[#E5E7EB]">
                 Verified Rotary members get instant premium pricing on top brand devices and accessories.
               </p>
-=======
-    <main className="min-h-screen bg-[#F8F9FA] text-[#1F2937]">
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-b from-white to-[#F8F9FA] py-12 md:py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-8 md:gap-12 lg:grid-cols-2 lg:items-center">
-            {/* Text Content */}
-            <div className="order-2 md:order-1">
-              <p className="text-xs font-bold uppercase tracking-[0.4em] text-[#F4B400]">
-                KamzyBee Global Enterprise
-              </p>
-              <h1 className="mt-4 text-3xl font-bold tracking-tight text-[#0B3D91] sm:text-4xl md:text-5xl">
-                Premium Tech, Trusted Quality
-              </h1>
-              <p className="mt-4 max-w-xl text-base leading-relaxed text-[#6B7280] md:text-lg">
-                Browse phones, laptops, and accessories with real-time stock status, secure checkout, and fast delivery across Nigeria.
-              </p>
-
-              {/* CTA Buttons */}
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Link
-                  href="/inventory"
-                  className="inline-flex items-center justify-center rounded-full bg-[#0B3D91] px-8 py-3 text-sm font-bold text-white transition hover:bg-[#0A3078] hover:shadow-lg md:text-base"
-                >
-                  Browse Inventory
-                </Link>
-                <Link
-                  href="/about"
-                  className="inline-flex items-center justify-center rounded-full border-2 border-[#0B3D91] bg-white px-8 py-3 text-sm font-bold text-[#0B3D91] transition hover:bg-[#F0F4FF] md:text-base"
-                >
-                  Learn More
-                </Link>
-              </div>
->>>>>>> ec604b7 (Refine frontend homepage and shared UX shell)
-            </div>
-
-            <div className="flex items-center justify-between gap-3 rounded-3xl border border-white/15 bg-white/10 px-4 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-white shadow-lg shadow-[#0B3D91]/30 transition md:hidden">
-              <span className="flex items-center gap-2">
-                <span className="grid h-8 w-8 place-items-center rounded-full bg-[#F4B400] text-[#0B3D91] shadow-inner shadow-[#F4B400]/30 animate-spin-slow">
-                  <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M12 2a10 10 0 1 0 10 10" />
-                    <path d="M12 2v4" strokeLinecap="round" />
-                    <path d="M16 4.9 14.2 7.7" strokeLinecap="round" />
-                  </svg>
-                </span>
-                20% Rotary Member Savings
-              </span>
-              <span className="text-[10px] text-[#E5E7EB]">Verified Rotary members get premium pricing</span>
             </div>
           </div>
 
@@ -232,7 +184,6 @@ export default function Home() {
           </div>
         </section>
 
-<<<<<<< HEAD
         <section className="grid gap-6 rounded-xl border border-gray-100 bg-[#F8F9FA] p-6 shadow-sm sm:grid-cols-2 lg:grid-cols-4">
           {featureCards.map((item) => (
             <div key={item.title} className="flex items-start gap-4 p-2">
@@ -295,29 +246,28 @@ export default function Home() {
               </Link>
             </div>
           </section>
-=======
-      {/* Exclusive Rotary Discount Section */}
-      <section className="py-12 md:py-20">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <RotaryDiscountComponent />
         </div>
-      </section>
 
-      {/* CTA Section */}
-      <section className="bg-[#0B3D91] py-12 text-white md:py-20">
-        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold md:text-4xl">Ready to find your perfect tech?</h2>
-          <p className="mt-4 text-lg text-blue-100">
-            Explore our full inventory with real-time pricing and instant availability
-          </p>
-          <Link
-            href="/inventory"
-            className="mt-8 inline-flex items-center justify-center rounded-full bg-[#F4B400] px-8 py-3 text-sm font-bold text-[#0B3D91] transition hover:bg-[#F5C444] hover:shadow-lg md:text-base"
-          >
-            Browse Our Inventory
-          </Link>
->>>>>>> ec604b7 (Refine frontend homepage and shared UX shell)
-        </div>
+        <section className="py-12 md:py-20">
+          <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+            <RotaryDiscountComponent />
+          </div>
+        </section>
+
+        <section className="bg-[#0B3D91] py-12 text-white md:py-20">
+          <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-bold md:text-4xl">Ready to find your perfect tech?</h2>
+            <p className="mt-4 text-lg text-blue-100">
+              Explore our full inventory with real-time pricing and instant availability
+            </p>
+            <Link
+              href="/inventory"
+              className="mt-8 inline-flex items-center justify-center rounded-full bg-[#F4B400] px-8 py-3 text-sm font-bold text-[#0B3D91] transition hover:bg-[#F5C444] hover:shadow-lg md:text-base"
+            >
+              Browse Our Inventory
+            </Link>
+          </div>
+        </section>
 
         <section className="grid gap-8 rounded-xl bg-[#0B3D91] px-6 py-8 text-white shadow-inner md:grid-cols-2 lg:grid-cols-4 md:px-10">
           {[

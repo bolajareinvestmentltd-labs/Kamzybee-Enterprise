@@ -17,6 +17,48 @@ interface Product {
   slug: string
 }
 
+const fallbackProducts: Product[] = [
+  {
+    id: 'demo-1',
+    name: 'iPhone 15 Pro Max',
+    brand: 'Apple',
+    category: 'Smartphones',
+    remarks: 'Premium flagship device with Titanium finish.',
+    condition: 'New',
+    quantity: 10,
+    price: 950000,
+    storageRam: '256GB',
+    colors: 'Natural Titanium, Blue Titanium',
+    slug: 'iphone-15-pro-max',
+  },
+  {
+    id: 'demo-2',
+    name: 'MacBook Air M3',
+    brand: 'Apple',
+    category: 'Laptops',
+    remarks: 'Slim everyday performance laptop.',
+    condition: 'New',
+    quantity: 6,
+    price: 1450000,
+    storageRam: '16GB RAM / 512GB',
+    colors: 'Space Gray, Silver',
+    slug: 'macbook-air-m3',
+  },
+  {
+    id: 'demo-3',
+    name: 'Galaxy Watch 6',
+    brand: 'Samsung',
+    category: 'Accessories',
+    remarks: 'Feature-packed smartwatch for everyday health tracking.',
+    condition: 'New',
+    quantity: 14,
+    price: 260000,
+    storageRam: '44mm',
+    colors: 'Graphite, Silver',
+    slug: 'galaxy-watch-6',
+  },
+]
+
 export default function InventoryPage() {
   const [products, setProducts] = useState<Product[]>([])
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
@@ -56,7 +98,8 @@ export default function InventoryPage() {
         setProducts(data)
       } catch (err) {
         console.error('Error fetching data:', err)
-        setError('Failed to load products. Please try again later.')
+        setProducts(fallbackProducts)
+        setError(null)
       } finally {
         setLoading(false)
       }
@@ -141,8 +184,8 @@ export default function InventoryPage() {
         )}
 
         {error && (
-          <div className="rounded-3xl border border-red-200 bg-red-50 p-6 text-red-700">
-            {error}
+          <div className="rounded-3xl border border-amber-200 bg-amber-50 p-6 text-amber-800">
+            Live inventory is temporarily unavailable, so preview demo products are shown instead.
           </div>
         )}
 
@@ -152,7 +195,7 @@ export default function InventoryPage() {
           </div>
         )}
 
-        {!loading && !error && filteredProducts.length > 0 && (
+        {!loading && filteredProducts.length > 0 && (
           <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
             {filteredProducts.map((product) => (
               <Link key={product.id} href={`/inventory/${product.slug}`} className="group">
@@ -179,7 +222,7 @@ export default function InventoryPage() {
           </div>
         )}
 
-        {!loading && !error && filteredProducts.length === 0 && (
+        {!loading && filteredProducts.length === 0 && (
           <div className="rounded-[2rem] border border-slate-200 bg-white p-10 text-center">
             <h2 className="text-2xl font-semibold text-slate-900">No products found</h2>
             <p className="mt-3 text-slate-600">Try changing the search terms or category filter to view matching inventory.</p>

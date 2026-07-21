@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 
 const navItems = [
@@ -55,6 +55,9 @@ const categories = [
 
 export default function MobileNavDock() {
   const [trayOpen, setTrayOpen] = useState(false)
+  const [dockOffset, setDockOffset] = useState(0)
+  const dragStartY = useRef<number | null>(null)
+  const dragStartOffset = useRef(0)
 
   useEffect(() => {
     if (!trayOpen) return
@@ -69,31 +72,62 @@ export default function MobileNavDock() {
     return () => window.removeEventListener('keydown', onEscape)
   }, [trayOpen])
 
+  const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    dragStartY.current = event.clientY
+    dragStartOffset.current = dockOffset
+    event.currentTarget.setPointerCapture(event.pointerId)
+  }
+
+  const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (dragStartY.current === null) return
+
+    const movement = event.clientY - dragStartY.current
+    const nextOffset = Math.max(-24, Math.min(24, dragStartOffset.current + movement))
+    setDockOffset(nextOffset)
+  }
+
+  const handlePointerUp = (event: React.PointerEvent<HTMLDivElement>) => {
+    dragStartY.current = null
+    event.currentTarget.releasePointerCapture(event.pointerId)
+    setDockOffset(0)
+  }
+
   return (
     <>
-      <div className="fixed inset-x-0 bottom-0 z-40 flex justify-center px-4 py-4 md:hidden">
-        <div className="w-full max-w-md rounded-3xl border border-[var(--border)] bg-[color:rgba(255,255,255,0.95)] px-3 py-3 shadow-2xl shadow-slate-950/20 backdrop-blur-xl">
-          <div className="grid grid-cols-4 gap-1">
+      <div className="fixed inset-x-0 bottom-0 z-40 flex justify-center px-3 pb-3 md:hidden">
+        <div
+          className="w-full max-w-[420px] rounded-full border border-white/70 bg-[color:rgba(255,255,255,0.94)] px-1.5 py-1.5 shadow-[0_12px_40px_rgba(15,23,42,0.2)] backdrop-blur-2xl"
+          style={{ transform: `translateY(${dockOffset}px)`, touchAction: 'none' }}
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          onPointerCancel={handlePointerUp}
+        >
+          <div className="grid grid-cols-5 gap-1">
             {navItems.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className="inline-flex flex-col items-center justify-center rounded-2xl px-2 py-2 text-xs font-medium text-[var(--foreground)] transition hover:bg-[#F8F9FA] hover:text-[#0B3D91]"
+                className="inline-flex flex-col items-center justify-center rounded-full px-1 py-2 text-xs font-semibold text-[var(--foreground)] transition hover:bg-[#F8F9FA] hover:text-[#0B3D91]"
               >
-                {item.icon}
-                <span className="mt-1 text-[10px] font-semibold">{item.name}</span>
+                <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#EFF6FF] text-[#0B3D91]">
+                  {item.icon}
+                </span>
+                <span className="mt-1 text-[10px] font-bold">{item.name}</span>
               </Link>
             ))}
             <button
               type="button"
               onClick={() => setTrayOpen(true)}
-              className="inline-flex flex-col items-center justify-center rounded-2xl bg-[#0B3D91] px-2 py-2 text-white transition hover:bg-[#0A3078]"
+              className="inline-flex flex-col items-center justify-center rounded-full bg-[#0B3D91] px-1 py-2 text-white shadow-lg shadow-[#0B3D91]/20 transition hover:bg-[#0A3078]"
               aria-label="Open categories"
             >
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-5 w-5">
-                <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-              </svg>
-              <span className="mt-1 text-[10px] font-semibold">Menu</span>
+              <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/10">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-5 w-5">
+                  <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                </svg>
+              </span>
+              <span className="mt-1 text-[10px] font-bold">Menu</span>
             </button>
           </div>
         </div>
