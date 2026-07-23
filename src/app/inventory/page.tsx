@@ -187,13 +187,13 @@ export default function InventoryPage() {
           </div>
         )}
 
-        {error && (
+        {fetchError && (
           <div className="rounded-3xl border border-amber-200 bg-amber-50 p-6 text-amber-800">
-            Live inventory is temporarily unavailable, so preview demo products are shown instead.
+            {fetchError}
           </div>
         )}
 
-        {!loading && !error && (
+        {!loading && !fetchError && (
           <div className="mb-4 text-sm text-slate-600">
             Showing <span className="font-semibold">{filteredProducts.length}</span> of <span className="font-semibold">{products.length}</span> products
           </div>
