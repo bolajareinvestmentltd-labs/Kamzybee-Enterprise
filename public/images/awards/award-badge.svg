@@ -1,0 +1,7 @@
+<svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="160" height="160" rx="28" fill="#0B3D91"/>
+  <circle cx="80" cy="62" r="34" fill="#F4B400"/>
+  <path d="M58 62L72 74L102 44" stroke="#0B3D91" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="36" y="98" width="88" height="16" rx="8" fill="#F8FAFC"/>
+  <text x="80" y="128" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#F8FAFC">Award</text>
+</svg>

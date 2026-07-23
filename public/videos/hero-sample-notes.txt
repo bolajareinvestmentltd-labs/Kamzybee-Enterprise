@@ -1,0 +1,15 @@
+This folder should contain optimized hero video files used by the landing page.
+
+Recommended filenames:
+- hero.webm
+- hero.mp4
+
+If these files are missing the app will attempt to use public sample fallback videos.
+
+To add your branded videos (preferred):
+1. Resize/crop to 16:9 (aspect) and keep file sizes small (<= 2-4MB) for faster loads.
+2. Provide both .webm and .mp4 for broader compatibility.
+3. Place the files at `public/videos/hero.webm` and `public/videos/hero.mp4`.
+4. Re-run the dev server if necessary.
+
+License: Add only royalty-free or licensed assets you own or have permission to use.
