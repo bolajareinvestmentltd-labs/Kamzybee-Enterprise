@@ -114,13 +114,13 @@ export default function Home() {
             </p>
             <div className="flex flex-wrap gap-4 pt-2 [animation-delay:200ms]">
               <Link
-                href="/inventory"
+                href="/shop"
                 className="rounded-md bg-[#F4B400] px-8 py-3 text-sm font-semibold uppercase tracking-wider text-[#1F2937] shadow-md transition-all hover:bg-yellow-500"
               >
                 Shop Now
               </Link>
               <Link
-                href="/inventory"
+                href="/shop"
                 title="Latest update pushed to main"
                 className="rounded-md border-2 border-white px-8 py-3 text-sm font-semibold uppercase tracking-wider text-white transition-all hover:bg-white hover:text-[#0B3D91]"
               >
@@ -128,7 +128,7 @@ export default function Home() {
               </Link>
             </div>
             <div className="mt-6 inline-flex flex-col gap-3 rounded-full border border-white/20 bg-white/10 p-4 text-sm text-white shadow-2xl shadow-[#0B3D91]/25 backdrop-blur sm:flex-row sm:items-center sm:gap-4">
-              <div className="inline-flex items-center gap-3 rounded-full bg-[#F4B400] px-3 py-2 text-[#0B3D91] shadow-inner shadow-[#F4B400]/30">
+              <Link href="#rotary-membership" className="inline-flex items-center gap-3 rounded-full bg-[#F4B400] px-3 py-2 text-[#0B3D91] shadow-inner shadow-[#F4B400]/30 transition hover:bg-yellow-200">
                 <span className="grid h-10 w-10 place-items-center rounded-full bg-white text-[#0B3D91] shadow-sm animate-spin-slow">
                   <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M12 2a10 10 0 1 0 10 10" />
@@ -137,8 +137,8 @@ export default function Home() {
                     <path d="M20 12h-4" strokeLinecap="round" />
                   </svg>
                 </span>
-                <span className="font-semibold uppercase tracking-[0.2em]">20% Rotary / Rotaract member savings</span>
-              </div>
+                <span className="font-semibold uppercase tracking-[0.2em]">20% OFF</span>
+              </Link>
               <p className="max-w-xl text-sm text-[#E5E7EB]">
                 Verified Rotary members get instant premium pricing on top brand devices and accessories.
               </p>
@@ -248,7 +248,7 @@ export default function Home() {
           </section>
         </div>
 
-        <section className="py-12 md:py-20">
+        <section id="rotary-membership" className="py-12 md:py-20">
           <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
             <RotaryDiscountComponent />
           </div>

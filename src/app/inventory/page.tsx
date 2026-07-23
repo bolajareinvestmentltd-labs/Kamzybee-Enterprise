@@ -59,12 +59,14 @@ const fallbackProducts: Product[] = [
   },
 ]
 
+const defaultCategories = ['Smartphones', 'Laptops', 'Accessories', 'Business Solutions', 'Wearables']
+
 export default function InventoryPage() {
   const [products, setProducts] = useState<Product[]>([])
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const [fetchError, setFetchError] = useState<string | null>(null)
 
   useEffect(() => {
     const urlSearchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null
@@ -82,6 +84,7 @@ export default function InventoryPage() {
     const fetchData = async () => {
       try {
         setLoading(true)
+        setFetchError(null)
 
         const query = new URLSearchParams()
         if (categoryParam) query.set('category', categoryParam)
@@ -99,7 +102,7 @@ export default function InventoryPage() {
       } catch (err) {
         console.error('Error fetching data:', err)
         setProducts(fallbackProducts)
-        setError(null)
+        setFetchError('Live inventory is temporarily unavailable. Showing sample products.')
       } finally {
         setLoading(false)
       }
@@ -109,25 +112,26 @@ export default function InventoryPage() {
   }, [])
 
   const categories = useMemo(() => {
-    return Array.from(new Set(products.map((product) => product.category))).filter(Boolean)
+    const dynamicCategories = Array.from(new Set(products.map((product) => product.category))).filter(Boolean)
+    return dynamicCategories.length > 0 ? dynamicCategories : defaultCategories
   }, [products])
 
   const filteredProducts = useMemo(() => {
+    const normalizedSearch = searchQuery.trim().toLowerCase()
+
     return products.filter((product) => {
       if (selectedCategory && product.category !== selectedCategory) {
         return false
       }
 
-      if (searchQuery) {
-        const lowerSearch = searchQuery.toLowerCase()
-        return (
-          product.name.toLowerCase().includes(lowerSearch) ||
-          product.brand.toLowerCase().includes(lowerSearch) ||
-          product.category.toLowerCase().includes(lowerSearch)
-        )
+      if (!normalizedSearch) {
+        return true
       }
 
-      return true
+      return [product.name, product.brand, product.category, product.remarks]
+        .join(' ')
+        .toLowerCase()
+        .includes(normalizedSearch)
     })
   }, [products, selectedCategory, searchQuery])
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { type PointerEvent, useRef, useState } from 'react'
 import Link from 'next/link'
 
 const navItems = [
@@ -34,7 +34,7 @@ const navItems = [
   },
   {
     name: 'Account',
-    href: '/auth',
+    href: '/account',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-5 w-5">
         <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
@@ -55,40 +55,18 @@ const navItems = [
   },
 ]
 
-const categories = [
-  'Smartphones',
-  'Laptops',
-  'Accessories',
-  'Business Solutions',
-  'Customer Support',
-]
-
-export default function MobileNavDock() {
-  const [trayOpen, setTrayOpen] = useState(false)
+export default function DockMobile() {
   const [dockOffset, setDockOffset] = useState(0)
   const dragStartY = useRef<number | null>(null)
   const dragStartOffset = useRef(0)
 
-  useEffect(() => {
-    if (!trayOpen) return
-
-    const onEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setTrayOpen(false)
-      }
-    }
-
-    window.addEventListener('keydown', onEscape)
-    return () => window.removeEventListener('keydown', onEscape)
-  }, [trayOpen])
-
-  const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+  const handlePointerDown = (event: PointerEvent<HTMLDivElement>) => {
     dragStartY.current = event.clientY
     dragStartOffset.current = dockOffset
     event.currentTarget.setPointerCapture(event.pointerId)
   }
 
-  const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+  const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
     if (dragStartY.current === null) return
 
     const movement = event.clientY - dragStartY.current
@@ -96,7 +74,7 @@ export default function MobileNavDock() {
     setDockOffset(nextOffset)
   }
 
-  const handlePointerUp = (event: React.PointerEvent<HTMLDivElement>) => {
+  const handlePointerUp = (event: PointerEvent<HTMLDivElement>) => {
     dragStartY.current = null
     event.currentTarget.releasePointerCapture(event.pointerId)
     setDockOffset(0)
@@ -151,7 +129,7 @@ export default function MobileNavDock() {
               Cart
             </Link>
             <Link
-              href="/auth"
+              href="/account"
               className="rounded-full bg-[#D4AF37] px-4 py-2 text-sm font-semibold text-[#0F172A] transition hover:bg-[#C59F2E]"
             >
               Account
@@ -159,44 +137,6 @@ export default function MobileNavDock() {
           </div>
         </div>
       </div>
-
-      {trayOpen ? (
-        <>
-          <div
-            className="fixed inset-0 z-50 bg-slate-950/50 backdrop-blur-sm transition-opacity duration-300"
-            onClick={() => setTrayOpen(false)}
-          />
-          <div className="fixed inset-x-4 bottom-24 z-50 w-[calc(100%-2rem)] rounded-3xl border border-[var(--border)] bg-[var(--card-bg)] p-4 shadow-2xl shadow-slate-950/20 backdrop-blur-xl transition duration-300 md:inset-x-20 md:bottom-10 md:max-w-2xl">
-            <div className="mb-4 flex items-start justify-between gap-3">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#0B3D91]">Categories</p>
-                <p className="mt-1 text-sm font-semibold text-[var(--foreground)]">Browse by product type</p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setTrayOpen(false)}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#F8F9FA] text-[#0B3D91] transition hover:bg-[#E5E7EB]"
-                aria-label="Close tray"
-              >
-                <span className="text-lg font-bold">×</span>
-              </button>
-            </div>
-
-            <div className="grid gap-2">
-              {categories.map((category) => (
-                <Link
-                  key={category}
-                  href={`/shop?category=${encodeURIComponent(category)}`}
-                  className="w-full rounded-2xl border border-[var(--border)] bg-[#F8F9FA] px-4 py-3 text-left text-sm font-medium text-[var(--foreground)] transition hover:border-[#0B3D91] hover:bg-[#F0F4FF]"
-                  onClick={() => setTrayOpen(false)}
-                >
-                  {category}
-                </Link>
-              ))}
-            </div>
-          </div>
-        </>
-      ) : null}
     </>
   )
 }

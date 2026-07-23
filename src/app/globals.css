@@ -53,29 +53,6 @@ html.dark,
   --color-secondary: var(--secondary);
 }
 
-:root.dark {
-  --background: #0f172a;
-  --text: #e2e8f0;
-  --text-light: #94a3b8;
-  --primary: #D4AF37;
-  --secondary: #F4B400;
-  --card-bg: #111827;
-  --foreground: #e2e8f0;
-  --border: #334155;
-  --overlay: rgba(96, 165, 250, 0.15);
-}
-
-:root.light {
-  --background: #FFFFFF;
-  --text: #111827;
-  --text-light: #6B7280;
-  --primary: #0B3D91;
-  --secondary: #F4B400;
-  --card-bg: #FFFFFF;
-  --foreground: #111827;
-  --border: #E5E7EB;
-  --overlay: rgba(11, 61, 145, 0.08);
-}
 
 @media (prefers-color-scheme: dark) {
   :root:not(.light) {
@@ -107,6 +84,7 @@ html, body {
   margin: 0;
   padding: 0;
   font-family: system-ui, -apple-system, sans-serif;
+  scroll-behavior: smooth;
 }
 
 body {

@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { client } from '@/lib/sanityClient'
 
-const query = '*[_type == "aboutPage"][0]{companyBio, ceoName, ceoBio, ceoImage, awards[]{title,year,image}, cacCertificateImage}'
+const query = '*[_type == "aboutPage"][0]{companyBio, ceoName, ceoBio, ceoImage{asset->{url}}, awards[]{title,year,image{asset->{url}}}, cacCertificateImage{asset->{url}}}'
 
 const defaultAwards = [
   { title: 'NR-MDIO (Meritorious Service Award)', year: '2021/2022' },
@@ -25,7 +25,7 @@ function getAwardBadge(title: string) {
 }
 
 export default async function AboutPage() {
-  let data = null
+  let data: any = null
   try {
     data = await client.fetch(query)
   } catch (error) {
@@ -33,18 +33,18 @@ export default async function AboutPage() {
     data = null
   }
 
-  const ceoImageUrl = typeof data?.ceoImage?.asset?.url === 'string' && data.ceoImage.asset.url.length > 0
-    ? data.ceoImage.asset.url
-    : '/images/about/ceo-portrait.jpeg'
+  const ceoImageUrl = data?.ceoImage?.asset?.url || '/images/about/ceo-portrait.jpeg'
   const awardEntries = Array.isArray(data?.awards) && data.awards.length > 0 ? data.awards : defaultAwards
+  const cacImageUrl = data?.cacCertificateImage?.asset?.url || '/images/awards/certificate-badge.svg'
   const ceoIsRemote = /^https?:\/\//i.test(ceoImageUrl)
+  const cacIsRemote = /^https?:\/\//i.test(cacImageUrl)
 
   return (
     <div className="min-h-screen bg-slate-50 py-16">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <h1 className="text-4xl font-bold">About Kamzybee Global Enterprise</h1>
         <section className="mt-8 space-y-6">
-          <div className="prose max-w-none">{data?.companyBio && <PortableText value={data.companyBio} />}</div>
+          <div className="prose max-w-none">{data?.companyBio ? <PortableText value={data.companyBio} /> : <p>Kamzybee Global Enterprise is a trusted source for top tech products, combining quality, value, and service across Nigeria and beyond.</p>}</div>
         </section>
 
         <section className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-3">
@@ -58,40 +58,21 @@ export default async function AboutPage() {
             </div>
           </div>
 
-          <div className="md:col-span-2">
-            <h2 className="text-2xl font-semibold">Our Mission & Values</h2>
-            <div className="mt-4 prose max-w-none">{data?.companyBio && <PortableText value={data.companyBio} />}</div>
+          <div className="md:col-span-2 space-y-6">
+            <div className="rounded-[1.5rem] border border-slate-200 bg-white p-6 shadow-sm">
+              <h2 className="text-2xl font-semibold">Our Mission & Values</h2>
+              <div className="mt-4 prose max-w-none">{data?.companyBio ? <PortableText value={data.companyBio} /> : <p>We deliver premium technology with honesty, service, and trusted value for Rotary and general customers alike.</p>}</div>
+            </div>
+
+            <div className="rounded-[1.5rem] border border-slate-200 bg-white p-6 shadow-sm">
+              <h2 className="text-2xl font-semibold">CEO Profile</h2>
+              <p className="mt-4 text-sm text-slate-700">{data?.ceoName || 'Kamaldeen Oyewumi'} leads Kamzybee Global Enterprise with a focus on service, youth empowerment, and sustainable growth.</p>
+              <div className="mt-4 prose max-w-none">{data?.ceoBio ? <PortableText value={data.ceoBio} /> : <p>As the Chief Executive Officer, Kamaldeen drives the brand forward with integrity, community leadership, and a passion for delivering quality customer experiences.</p>}</div>
+            </div>
           </div>
         </section>
 
         <section className="mt-12 rounded-[1.5rem] border border-slate-200 bg-white p-8 shadow-sm">
-          <h2 className="text-2xl font-semibold">CEO Profile</h2>
-          <div className="mt-6 space-y-4 text-slate-700">
-            <p>
-              Kamaldeen Oyewumi, popularly known as KamzyBee, is a visionary entrepreneur, transformational Rotaract leader, business strategist and passionate advocate for youth empowerment, peacebuilding and sustainable development.
-            </p>
-            <p>
-              As the Chief Executive Officer of Kamzybee Global Enterprise, Kamaldeen provides strategic direction for an enterprise committed to delivering quality products and innovative business solutions while maintaining the highest standards of professionalism, integrity and customer satisfaction.
-            </p>
-            <p>
-              Within the global Rotaract movement, his leadership is recognized across Nigeria and beyond. He served as President of the Rotaract Nigeria Multi-District Information Organization (RN-MDIO) for the 2025–2026 Rotary Year, where he promoted national unity, strengthened collaboration, and inspired institutional advancement.
-            </p>
-            <p>
-              Kamaldeen also serves as a Learning Facilitator for Rotaract Region 22, contributing to leadership development, capacity building and knowledge transfer across the region. His Rotaract journey includes leadership roles such as Regional Learning Facilitator, Chairman of the All Nigeria Multi-District Conference, State Rotaract Representative, and President of the Rotaract Club of University of Ilorin.
-            </p>
-            <p>
-              Beyond Rotaract, he is the Pioneer President of AutoFest International, where he helped build the Ilorin Automotive Festival into a landmark event for automotive innovation, entrepreneurship and economic development.
-            </p>
-            <p>
-              A Fellow of the Ecolerite Institute for Peace Advancement (FEIPA), Kamaldeen remains committed to promoting peace, dialogue, conflict resolution and social cohesion, with aspirations to become a Rotary Peace Fellow.
-            </p>
-            <p>
-              His professional strengths include strategic leadership, mentoring, project management, stakeholder engagement and business development. Through Kamzybee Global Enterprise, he continues to inspire a new generation of leaders to dream boldly, serve selflessly and lead with purpose.
-            </p>
-          </div>
-        </section>
-
-        <section className="mt-12">
           <h2 className="text-2xl font-semibold">Certifications & Awards</h2>
           <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
             {awardEntries.map((a: any, idx: number) => {
@@ -102,8 +83,8 @@ export default async function AboutPage() {
               const isRemoteImage = /^https?:\/\//i.test(imageUrl)
 
               return (
-                <div key={idx} className="rounded-lg border bg-white p-4 shadow-sm">
-                  <div className="mb-4 flex items-center justify-center rounded-xl border border-slate-100 bg-slate-50 p-3">
+                <div key={idx} className="rounded-lg border bg-slate-50 p-4 shadow-sm">
+                  <div className="mb-4 flex items-center justify-center rounded-xl border border-slate-100 bg-white p-3">
                     {isRemoteImage ? (
                       <img src={imageUrl} alt={`${title} badge`} className="h-16 w-16 rounded-lg object-cover" />
                     ) : (
@@ -117,13 +98,24 @@ export default async function AboutPage() {
             })}
           </div>
         </section>
+
+        <section className="mt-12 rounded-[1.5rem] border border-slate-200 bg-white p-8 shadow-sm">
+          <h2 className="text-2xl font-semibold">Certificate of Incorporation</h2>
+          <div className="mt-6 overflow-hidden rounded-3xl bg-slate-50 p-6">
+            {cacIsRemote ? (
+              <img src={cacImageUrl} alt="CAC Certificate" className="mx-auto max-h-[420px] w-full object-contain" />
+            ) : (
+              <Image src={cacImageUrl} alt="CAC Certificate" width={1200} height={800} className="mx-auto max-h-[420px] w-full object-contain" />
+            )}
+          </div>
+        </section>
       </div>
     </div>
   )
 }
 
 function PortableText({ value }: { value: any }) {
-  if (!value) return null
+  if (!value || !Array.isArray(value)) return null
   return (
     <div>
       {value.map((block: any, i: number) => (
