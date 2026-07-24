@@ -80,6 +80,17 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         )
       }
 
+      // dispatch a lightweight DOM event for toast/UI feedback
+      setTimeout(() => {
+        try {
+          window.dispatchEvent(
+            new CustomEvent('kamzybee:add-to-cart', { detail: { name: item.name, quantity } }),
+          )
+        } catch (e) {
+          // ignore in non-browser environments
+        }
+      }, 0)
+
       return [...current, { ...item, quantity }]
     })
   }

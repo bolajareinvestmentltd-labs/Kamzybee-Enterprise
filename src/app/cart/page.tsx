@@ -1,11 +1,13 @@
 'use client'
 
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useCart } from '@/components/CartProvider'
 import RotaryDiscountComponent from '@/components/RotaryDiscountComponent'
 
 export default function CartPage() {
   const { items, totalAmount, discountedTotal, updateItem, removeItem, clearCart } = useCart()
+  const router = useRouter()
 
   return (
     <div className="min-h-screen bg-slate-50 py-16">
@@ -97,6 +99,7 @@ export default function CartPage() {
                 </button>
                 <button
                   type="button"
+                  onClick={() => router.push('/checkout')}
                   className="w-full rounded-full bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
                 >
                   Proceed to checkout

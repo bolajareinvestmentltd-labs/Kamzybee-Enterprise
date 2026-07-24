@@ -4,6 +4,7 @@ import Header from '@/components/Header'
 import CartProvider from '@/components/CartProvider'
 import DockMobile from '@/components/DockMobile'
 import Footer from '@/components/Footer'
+import CartToast from '@/components/CartToast'
 
 export const metadata: Metadata = {
   title: 'KamzyBee Global Enterprise',
@@ -24,6 +25,8 @@ export default function RootLayout({
           <main className="pb-28 md:pb-0">
             {children}
           </main>
+
+          <CartToast />
 
           <Footer />
           <DockMobile />

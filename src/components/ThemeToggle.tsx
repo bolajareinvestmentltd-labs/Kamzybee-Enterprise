@@ -52,7 +52,7 @@ export default function ThemeToggle() {
     <button
       type="button"
       onClick={handleToggle}
-      className="inline-flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] px-3 py-2 text-sm font-medium text-[var(--foreground)] transition hover:border-[#D4AF37] focus:outline-none"
+      className="inline-flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card-bg)] px-3 py-2 text-sm font-medium text-[var(--foreground)] transition hover:border-[#D4AF37] focus:outline-none"
       aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
     >
       <span className="flex items-center gap-2">

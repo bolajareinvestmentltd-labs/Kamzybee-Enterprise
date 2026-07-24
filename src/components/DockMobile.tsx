@@ -108,35 +108,7 @@ export default function DockMobile() {
         </div>
       </div>
 
-      <div className="hidden fixed inset-x-0 bottom-4 z-40 justify-center px-4 md:flex">
-        <div className="flex w-full max-w-6xl items-center justify-between gap-6 rounded-3xl border border-white/20 bg-white/80 px-6 py-4 shadow-[0_20px_60px_rgba(15,23,42,0.16)] backdrop-blur-2xl">
-          <div className="flex flex-1 flex-wrap items-center gap-6 text-sm font-semibold text-[#0F172A]">
-            {navItems.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="rounded-full px-4 py-2 transition hover:bg-[#EFF6FF] hover:text-[#0B3D91]"
-              >
-                {item.name}
-              </Link>
-            ))}
-          </div>
-          <div className="flex items-center gap-3">
-            <Link
-              href="/cart"
-              className="rounded-full border border-[#E5E7EB] bg-white px-4 py-2 text-sm font-semibold text-[#0F172A] transition hover:bg-[#F8FAFC]"
-            >
-              Cart
-            </Link>
-            <Link
-              href="/account"
-              className="rounded-full bg-[#D4AF37] px-4 py-2 text-sm font-semibold text-[#0F172A] transition hover:bg-[#C59F2E]"
-            >
-              Account
-            </Link>
-          </div>
-        </div>
-      </div>
+      {/* Desktop expanded dock intentionally removed so desktop uses the top header navigation. */}
     </>
   )
 }

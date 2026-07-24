@@ -1,6 +1,6 @@
 "use client"
 
-import { FormEvent, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import Link from 'next/link'
 
 const companyLinks = [
@@ -60,6 +60,7 @@ const paymentMethods = ['Visa', 'Mastercard', 'Verve', 'Bank Transfer', 'Opay', 
 export default function Footer() {
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState('')
+  const [showScrollButton, setShowScrollButton] = useState(false)
   const year = 2026
 
   const handleSubscribe = (event: FormEvent<HTMLFormElement>) => {
@@ -75,6 +76,62 @@ export default function Footer() {
 
   const handleBackToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  useEffect(() => {
+    const onScroll = () => setShowScrollButton(window.scrollY > 300)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  const renderPaymentIcon = (payment: string) => {
+    const key = payment.toLowerCase()
+    switch (key) {
+      case 'visa':
+        return (
+          <svg className="h-6 w-10" viewBox="0 0 48 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+            <rect width="48" height="32" rx="4" fill="#142787" />
+            <path d="M8 22L13 10h3l-5 12H8z" fill="#fff" />
+          </svg>
+        )
+      case 'mastercard':
+        return (
+          <svg className="h-6 w-10" viewBox="0 0 48 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+            <rect width="48" height="32" rx="4" fill="#111827" />
+            <circle cx="20" cy="16" r="8" fill="#f59e0b" />
+            <circle cx="28" cy="16" r="8" fill="#ef4444" />
+          </svg>
+        )
+      case 'verve':
+        return (
+          <svg className="h-6 w-10" viewBox="0 0 48 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+            <rect width="48" height="32" rx="4" fill="#0f172a" />
+            <circle cx="24" cy="16" r="8" fill="#60a5fa" />
+          </svg>
+        )
+      case 'opay':
+        return (
+          <svg className="h-6 w-10" viewBox="0 0 48 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+            <rect width="48" height="32" rx="4" fill="#0f172a" />
+            <path d="M14 10h20v12H14z" fill="#d4af37" />
+          </svg>
+        )
+      case 'moniepoint':
+        return (
+          <svg className="h-6 w-10" viewBox="0 0 48 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+            <rect width="48" height="32" rx="4" fill="#0f172a" />
+            <path d="M12 16h24" stroke="#d4af37" strokeWidth="2" strokeLinecap="round" />
+          </svg>
+        )
+      default:
+        return (
+          <svg className="h-6 w-10" viewBox="0 0 48 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+            <rect width="48" height="32" rx="4" fill="#111827" />
+            <circle cx="24" cy="16" r="4" fill="#e5e7eb" />
+          </svg>
+        )
+    }
   }
 
   return (
@@ -220,8 +277,9 @@ export default function Footer() {
             </div>
             <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-[#475569] bg-[#0F172A]/70 px-4 py-4 text-sm text-[#E5E7EB]">
               {paymentMethods.map((payment) => (
-                <div key={payment} className="rounded-full bg-[#111827]/90 px-4 py-2 text-xs uppercase tracking-[0.15em] text-[#E5E7EB]">
-                  {payment}
+                <div key={payment} className="flex items-center gap-2 rounded-full bg-[#111827]/90 px-3 py-2 text-xs uppercase tracking-[0.15em] text-[#E5E7EB]">
+                  {renderPaymentIcon(payment)}
+                  <span className="ml-2 hidden sm:inline">{payment}</span>
                 </div>
               ))}
             </div>
@@ -242,17 +300,19 @@ export default function Footer() {
         </div>
       </div>
 
-      <button
-        type="button"
-        onClick={handleBackToTop}
-        aria-label="Scroll back to top"
-        className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full border border-slate-300 bg-white/95 text-slate-900 shadow-xl transition hover:-translate-y-1 hover:bg-white dark:border-slate-600 dark:bg-slate-900/95 dark:text-slate-100 sm:bottom-8 sm:right-8"
-      >
-        <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M12 19V6" />
-          <path d="M5 13l7-7 7 7" />
-        </svg>
-      </button>
+      {showScrollButton && (
+        <button
+          type="button"
+          onClick={handleBackToTop}
+          aria-label="Scroll back to top"
+          className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full border border-slate-300 bg-white/95 text-slate-900 shadow-xl transition hover:-translate-y-1 hover:bg-white dark:border-slate-600 dark:bg-slate-900/95 dark:text-slate-100 sm:bottom-8 sm:right-8"
+        >
+          <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 19V6" />
+            <path d="M5 13l7-7 7 7" />
+          </svg>
+        </button>
+      )}
     </footer>
   )
 }
