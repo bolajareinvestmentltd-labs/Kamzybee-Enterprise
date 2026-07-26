@@ -1,6 +1,8 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import RotaryDiscountComponent from '@/components/RotaryDiscountComponent'
 import VideoHeroWrapper from '@/components/VideoHeroWrapper'
+import { getCategories } from '@/lib/getCategories'
 
 const featureCards = [
   {
@@ -46,64 +48,27 @@ const featureCards = [
   },
 ]
 
+export type CategoryCard = {
+  title: string
+  imageUrl: string
+}
+
 const categories = [
-  {
-    title: 'Phones & Tablets',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-16 w-16 text-gray-400 transition-colors group-hover:text-[#0B3D91]">
-        <rect x="5" y="2" width="14" height="20" rx="2" />
-        <path d="M12 18h.01" strokeWidth="2" strokeLinecap="round" />
-      </svg>
-    ),
-  },
-  {
-    title: 'Laptops',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-16 w-16 text-gray-400 transition-colors group-hover:text-[#0B3D91]">
-        <rect x="2" y="4" width="20" height="12" rx="2" />
-        <path d="M2 16h20v2H2z" />
-        <path d="M12 18v2" />
-      </svg>
-    ),
-  },
-  {
-    title: 'Accessories',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-16 w-16 text-gray-400 transition-colors group-hover:text-[#0B3D91]">
-        <path d="M3 14c0-4.97 4.03-9 9-9s9 4.03 9 9" />
-        <rect x="2" y="14" width="4" height="6" rx="1" />
-        <rect x="18" y="14" width="4" height="6" rx="1" />
-      </svg>
-    ),
-  },
-  {
-    title: 'Smart Watches',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-16 w-16 text-gray-400 transition-colors group-hover:text-[#0B3D91]">
-        <circle cx="12" cy="12" r="7" />
-        <path d="M12 2v3M12 19v3M9 12h6" />
-        <rect x="9" y="5" width="6" height="14" rx="2" strokeDasharray="2 2" />
-      </svg>
-    ),
-  },
-  {
-    title: 'Fragrances',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-16 w-16 text-gray-400 transition-colors group-hover:text-[#0B3D91]">
-        <rect x="6" y="8" width="12" height="14" rx="3" />
-        <path d="M9 8V5a3 3 0 0 1 6 0v3" />
-        <circle cx="12" cy="14" r="2" />
-      </svg>
-    ),
-  },
+  { title: 'Phones & Tablets', imageUrl: 'https://via.placeholder.com/160?text=Phones' },
+  { title: 'Laptops', imageUrl: 'https://via.placeholder.com/160?text=Laptops' },
+  { title: 'Accessories', imageUrl: 'https://via.placeholder.com/160?text=Accessories' },
+  { title: 'Smart Watches', imageUrl: 'https://via.placeholder.com/160?text=Watches' },
+  { title: 'Fragrances', imageUrl: 'https://via.placeholder.com/160?text=Fragrances' },
 ]
 
-export default function Home() {
+export default async function Home() {
+  const resolvedCategories = await getCategories()
+
   return (
     <main className="min-h-screen bg-[#F3F4F6] text-[#1F2937] antialiased">
-      <div className="mx-auto flex max-w-7xl flex-col gap-8 px-4 py-8 md:px-6">
-        <section className="relative grid min-h-[420px] items-center gap-8 overflow-hidden rounded-[1.5rem] bg-gradient-to-br from-[#0B3D91] via-[#1a5bb8] to-[#0B3D91] p-8 text-white shadow-2xl md:p-12 lg:grid-cols-12 before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_top_right,_rgba(244,180,0,0.15),_transparent_60%)] before:pointer-events-none">
-          <div className="z-10 space-y-6 lg:col-span-6 animate-slide-up">
+      <div className="mx-auto flex max-w-7xl flex-col gap-6 px-3 py-4 sm:gap-8 sm:px-4 sm:py-8 md:px-6">
+        <section className="relative grid min-h-[420px] items-center gap-6 overflow-hidden rounded-[1.5rem] bg-gradient-to-br from-[#0B3D91] via-[#1a5bb8] to-[#0B3D91] p-5 text-white shadow-2xl sm:p-8 md:p-12 lg:grid-cols-12 before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_top_right,_rgba(244,180,0,0.15),_transparent_60%)] before:pointer-events-none">
+          <div className="z-10 space-y-5 lg:col-span-6 animate-slide-up sm:space-y-6">
             <h1 className="text-4xl font-bold leading-tight md:text-5xl">
               Quality Products.
               <br />
@@ -112,7 +77,7 @@ export default function Home() {
             <p className="max-w-md text-sm font-light text-gray-200 md:text-base">
               Shop the best products at unbeatable prices. Fast delivery. Secure payment. 100% satisfaction.
             </p>
-            <div className="flex flex-wrap gap-4 pt-2 [animation-delay:200ms]">
+            <div className="flex flex-col gap-3 pt-2 [animation-delay:200ms] sm:flex-row sm:flex-wrap sm:gap-4">
               <Link
                 href="/shop"
                 className="rounded-md bg-[#F4B400] px-8 py-3 text-sm font-semibold uppercase tracking-wider text-[#1F2937] shadow-md transition-all hover:bg-yellow-500"
@@ -127,7 +92,7 @@ export default function Home() {
                 Explore Deals
               </Link>
             </div>
-            <div className="mt-6 inline-flex flex-col gap-3 rounded-full border border-white/20 bg-white/10 p-4 text-sm text-white shadow-2xl shadow-[#0B3D91]/25 backdrop-blur sm:flex-row sm:items-center sm:gap-4">
+            <div className="mt-4 inline-flex w-full flex-col gap-3 rounded-[1.25rem] border border-white/20 bg-white/10 p-4 text-sm text-white shadow-2xl shadow-[#0B3D91]/25 backdrop-blur sm:mt-6 sm:w-auto sm:flex-row sm:items-center sm:gap-4 sm:rounded-full">
               <Link href="#rotary-membership" className="inline-flex items-center gap-3 rounded-full bg-[#F4B400] px-3 py-2 text-[#0B3D91] shadow-inner shadow-[#F4B400]/30 transition hover:bg-yellow-200">
                 <span className="grid h-10 w-10 place-items-center rounded-full bg-white text-[#0B3D91] shadow-sm animate-spin-slow">
                   <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
@@ -163,7 +128,7 @@ export default function Home() {
             <span className="text-center text-[10px] font-semibold uppercase tracking-wider text-green-50">For Rotary/Rotaract Members</span>
           </div>
 
-          <div className="absolute left-1/2 top-full z-20 mt-6 flex w-[calc(100%-2rem)] max-w-sm -translate-x-1/2 flex-col items-center gap-3 rounded-3xl border border-white/20 bg-gradient-to-r from-[#22C55E] to-[#16A34A] px-4 py-4 text-white shadow-2xl md:hidden">
+          <div className="absolute inset-x-4 top-full z-20 mt-6 flex max-w-sm flex-col items-center gap-3 rounded-3xl border border-white/20 bg-gradient-to-r from-[#22C55E] to-[#16A34A] px-4 py-4 text-white shadow-2xl md:hidden">
             <div className="flex w-full items-center justify-between gap-3">
               <div className="flex items-center gap-2">
                 <span className="grid h-10 w-10 place-items-center rounded-full bg-white text-[#0B3D91] shadow-inner shadow-[#F4B400]/30 animate-spin-slow">
@@ -205,15 +170,17 @@ export default function Home() {
               </Link>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-              {categories.map((item) => (
-                <Link
-                  key={item.title}
-                  href={`/inventory?category=${encodeURIComponent(item.title)}`}
-                  className="group"
-                >
-                  <div className="flex h-36 items-center justify-center rounded-xl border border-gray-100 bg-[#F8F9FA] p-6 shadow-sm transition-all group-hover:border-[#0B3D91]/30 group-hover:shadow">
-                    {item.icon}
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+              {resolvedCategories.map((item: CategoryCard) => (
+                <Link key={item.title} href={`/inventory?category=${encodeURIComponent(item.title)}`} className="group">
+                  <div className="flex h-36 items-center justify-center rounded-xl border border-gray-100 bg-[#F8F9FA] p-2 shadow-sm transition-all group-hover:border-[#0B3D91]/30 group-hover:shadow">
+                    <Image
+                      src={item.imageUrl}
+                      alt={item.title}
+                      width={160}
+                      height={160}
+                      className="h-24 w-full rounded-md object-cover sm:w-24"
+                    />
                   </div>
                   <p className="mt-3 text-center text-xs font-bold text-[#1F2937] transition-colors group-hover:text-[#0B3D91]">{item.title}</p>
                 </Link>
